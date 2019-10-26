@@ -1,0 +1,24 @@
+[
+  {
+    "Name": "/aws-appsync/secret",
+    "Description": "Simple secret.",
+    "Type": "String",
+    "Value": "one",
+    "Overwrite": true
+  },
+  {
+    "Name": "/aws-appsync/secure_secret",
+    "Description": "Secure secret with kms encryption.",
+    "Type": "SecureString",
+    "Value": "one",
+    "Overwrite": true,
+    "KeyId": "key"
+  },
+  {
+    "Name": "/aws-appsync/secrets",
+    "Description": "Two secrets separated by a comma.",
+    "Type": "StringList",
+    "Value": "one, two",
+    "Overwrite": true
+  }
+]

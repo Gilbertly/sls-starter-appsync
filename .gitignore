@@ -59,3 +59,15 @@ typings/
 
 # next.js build output
 .next
+
+# project-specific
+.vscode
+env.yml
+data/**
+**/*.zip
+build/**
+.serverless/**
+**/ssm.*.json
+!**/ssm.*.example
+**/cfn.params.*
+!**/cfn.params.*.example

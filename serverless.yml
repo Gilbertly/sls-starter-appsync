@@ -1,0 +1,36 @@
+service:
+  name: starter-appsync
+
+plugins:
+  - serverless-appsync-plugin
+  - serverless-pseudo-parameters
+
+custom:
+  config: ${file(./config/env.yml):${opt:stage, 'dev'}}
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  timeout: 10 # seconds
+  memorySize: 512
+  stage: ${opt:region, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+  logRetentionInDays: 7
+  deploymentBucket:
+    blockPublicAccess: true
+    serverSideEncryption: AES256
+
+package:
+  exclude:
+    - .git/**
+    - .serverless/**
+    - node_modules/**
+    - coverage/**
+    - src/__tests__/**
+    - aws/**
+  include:
+    - src/**
+  excludeDevDependencies: true
+
+resources:
+  -
