@@ -7,6 +7,32 @@ plugins:
 
 custom:
   config: ${file(./config/env.yml):${opt:stage, 'dev'}}
+  webpack:
+    webpackConfig: ./config/webpack.config.js
+    packagePath: ./package.json
+    packager: npm
+    forceExclude:
+      - aws-sdk
+  appsync-offline:
+    port: ${self:custom.config.APPSYNC_PORT, '7979'}
+  appSync:
+    name: starter-appsync
+    authenticationType: AMAZON_COGNITO_USER_POOLS
+    schema:
+    userPoolConfig:
+      awsRegion: ${self:provider.region}
+      defaultAction: ALLOW
+      userPoolId:
+      appIdClientRegex:
+    functionConfigurations:
+      - name:
+        dataSource:
+        request:
+        response:
+    dataSources:
+      - ${file(./aws/appsync.datasources.yml)}
+    mappingTemplates:
+      - ${file(./aws/mapping.templates.yml)}
 
 provider:
   name: aws
