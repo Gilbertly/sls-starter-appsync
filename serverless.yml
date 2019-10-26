@@ -18,17 +18,14 @@ custom:
   appSync:
     name: starter-appsync
     authenticationType: AMAZON_COGNITO_USER_POOLS
-    schema:
+    schema: ${file(./aws/schema.graphql)}
     userPoolConfig:
       awsRegion: ${self:provider.region}
       defaultAction: ALLOW
       userPoolId:
       appIdClientRegex:
     functionConfigurations:
-      - name:
-        dataSource:
-        request:
-        response:
+      - ${file(./aws/function.configs.yml)}
     dataSources:
       - ${file(./aws/appsync.datasources.yml)}
     mappingTemplates:
@@ -59,4 +56,5 @@ package:
   excludeDevDependencies: true
 
 resources:
-  -
+  - ${file(./aws/iam.roles.kms.yml)}
+  - ${file(./aws/cognito.userpools.yml)}
