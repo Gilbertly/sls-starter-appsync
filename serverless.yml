@@ -2,6 +2,8 @@ service:
   name: starter-appsync
 
 plugins:
+  - serverless-webpack
+  - serverless-appsync-offline
   - serverless-appsync-plugin
   - serverless-pseudo-parameters
 
@@ -15,6 +17,14 @@ custom:
       - aws-sdk
   appsync-offline:
     port: ${self:custom.config.APPSYNC_PORT, '7979'}
+    dynamodb:
+      client:
+        endpoint: http://localhost:${self:custom.config.DDB_PORT, '8000'}
+        region: localhost
+      server:
+        port: ${self:custom.config.DDB_PORT, '8000'}
+        dbPath: ./.dynamodb
+        inMemory: true
   appSync:
     name: starter-appsync
     authenticationType: AMAZON_COGNITO_USER_POOLS
@@ -25,11 +35,11 @@ custom:
       userPoolId:
       appIdClientRegex:
     functionConfigurations:
-      - ${file(./aws/function.configs.yml)}
+      - ${file(./aws/appsync.functions.yml)}
     dataSources:
       - ${file(./aws/appsync.datasources.yml)}
     mappingTemplates:
-      - ${file(./aws/mapping.templates.yml)}
+      - ${file(./aws/appsync.resolvers.yml)}
 
 provider:
   name: aws
