@@ -16,6 +16,9 @@
     "validate:all": "npm run lint:fix && npm audit fix && npm run clean:build",
     "deploy:dev": "npm run validate:dev && npm run validate:all && sls deploy --stage dev",
     "deploy:prod": " npm run validate:prod && npm run validate:all && sls deploy --stage prod",
+    "api:start": "sls appsync-offline start --noAuth",
+    "ddb:install": "sls dynamodb install",
+    "ddb:start": "sls dynamodb start --migrate",
     "cli:cmd": "ts-node ./src/utils/cli.entrypoint.ts --"
   },
   "repository": {
@@ -64,7 +67,9 @@
     "prettier": "^1.18.2",
     "rimraf": "^3.0.0",
     "serverless": "^1.55.1",
+    "serverless-appsync-offline": "^1.3.3",
     "serverless-appsync-plugin": "^1.1.2",
+    "serverless-dynamodb-local": "^0.2.38",
     "serverless-pseudo-parameters": "^2.5.0",
     "serverless-webpack": "^5.3.1",
     "ts-jest": "^24.1.0",
