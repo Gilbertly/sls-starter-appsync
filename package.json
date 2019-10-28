@@ -1,0 +1,83 @@
+{
+  "name": "sls-starter-appsync",
+  "version": "1.0.0",
+  "description": "DNS/CDN domains and subdomains management with GraphQL.",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "lint:fix": "eslint './src/**/*.{ts,tsx}' --fix",
+    "lint:test": "npm run lint:fix && jest",
+    "prepare:layer": "rimraf -f ./nodejs dependencies.zip && mkdir -p ./nodejs && cp -r ./node_modules ./nodejs",
+    "zip:layer": "npm run prepare:layer && zip -qr dependencies.zip nodejs && rimraf -f ./nodejs",
+    "clean:build": "rimraf -f build && npm run build",
+    "validate:dev": "npm run zip:layer && sls deploy --stage dev --noDeploy",
+    "validate:prod": "npm run zip:layer && sls deploy --stage prod --noDeploy",
+    "validate:all": "npm run lint:fix && npm audit fix && npm run clean:build",
+    "deploy:dev": "npm run validate:dev && npm run validate:all && sls deploy --stage dev",
+    "deploy:prod": " npm run validate:prod && npm run validate:all && sls deploy --stage prod",
+    "api:start": "sls appsync-offline start --noAuth",
+    "ddb:install": "sls dynamodb install",
+    "ddb:start": "sls dynamodb start --migrate",
+    "cli:cmd": "ts-node ./src/utils/cli.entrypoint.ts --"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@personal:gilbertly/sls-starter-appsync"
+  },
+  "author": "Gilbert Gathara",
+  "license": "MIT",
+  "eslintIgnore": [
+    "build/*",
+    "node_modules/*"
+  ],
+  "prettier": {
+    "trailingComma": "all",
+    "tabWidth": 2,
+    "semi": true,
+    "singleQuote": true
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint:fix",
+      "pre-push": "npm run validate:all"
+    }
+  },
+  "dependencies": {
+    "aws-sdk": "^2.556.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^8.2.0",
+    "@commitlint/config-conventional": "^8.2.0",
+    "@semantic-release/git": "^7.0.17",
+    "@semantic-release/github": "^5.5.5",
+    "@types/aws-lambda": "^8.10.34",
+    "@types/jest": "^24.0.20",
+    "@types/ora": "^3.2.0",
+    "@types/yargs": "^13.0.3",
+    "@typescript-eslint/eslint-plugin": "^2.5.0",
+    "@typescript-eslint/parser": "^2.5.0",
+    "aws-lambda": "^0.1.2",
+    "eslint": "^6.6.0",
+    "eslint-config-prettier": "^6.5.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "husky": "^3.0.9",
+    "jest": "^24.9.0",
+    "ora": "^4.0.2",
+    "prettier": "^1.18.2",
+    "rimraf": "^3.0.0",
+    "serverless": "^1.55.1",
+    "serverless-appsync-offline": "^1.3.3",
+    "serverless-appsync-plugin": "^1.1.2",
+    "serverless-dynamodb-local": "^0.2.38",
+    "serverless-pseudo-parameters": "^2.5.0",
+    "serverless-webpack": "^5.3.1",
+    "ts-jest": "^24.1.0",
+    "ts-loader": "^6.2.1",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.4",
+    "webpack": "^4.41.2",
+    "webpack-node-externals": "^1.7.2",
+    "yargs": "^14.2.0"
+  }
+}

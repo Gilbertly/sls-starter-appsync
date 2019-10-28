@@ -1,0 +1,70 @@
+service:
+  name: starter-appsync
+
+plugins:
+  - serverless-webpack
+  - serverless-appsync-offline
+  - serverless-appsync-plugin
+  - serverless-pseudo-parameters
+
+custom:
+  config: ${file(./config/env.yml):${opt:stage, 'dev'}}
+  webpack:
+    webpackConfig: ./config/webpack.config.js
+    packagePath: ./package.json
+    packager: npm
+    forceExclude:
+      - aws-sdk
+  appsync-offline:
+    port: ${self:custom.config.APPSYNC_PORT, '7979'}
+    dynamodb:
+      client:
+        endpoint: http://localhost:${self:custom.config.DDB_PORT, '8000'}
+        region: localhost
+      server:
+        port: ${self:custom.config.DDB_PORT, '8000'}
+        dbPath: ./.dynamodb
+        inMemory: true
+  appSync:
+    name: starter-appsync
+    authenticationType: AMAZON_COGNITO_USER_POOLS
+    schema: ${file(./aws/schema.graphql)}
+    userPoolConfig:
+      awsRegion: ${self:provider.region}
+      defaultAction: ALLOW
+      userPoolId:
+      appIdClientRegex:
+    functionConfigurations:
+      - ${file(./aws/appsync.functions.yml)}
+    dataSources:
+      - ${file(./aws/appsync.datasources.yml)}
+    mappingTemplates:
+      - ${file(./aws/appsync.resolvers.yml)}
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  timeout: 10 # seconds
+  memorySize: 512
+  stage: ${opt:region, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+  logRetentionInDays: 7
+  deploymentBucket:
+    blockPublicAccess: true
+    serverSideEncryption: AES256
+
+package:
+  exclude:
+    - .git/**
+    - .serverless/**
+    - node_modules/**
+    - coverage/**
+    - src/__tests__/**
+    - aws/**
+  include:
+    - src/**
+  excludeDevDependencies: true
+
+resources:
+  - ${file(./aws/iam.roles.kms.yml)}
+  - ${file(./aws/cognito.userpools.yml)}

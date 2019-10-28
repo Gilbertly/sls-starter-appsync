@@ -1,0 +1,13 @@
+- name:
+  type: AMAZON_DYNAMODB
+  description:
+  config:
+    tableName:
+    serviceRoleArn:
+- name:
+  type: AWS_LAMBDA
+  description:
+  config:
+    functionName:
+    lambdaFunctionArn:
+    serviceRoleArn:
