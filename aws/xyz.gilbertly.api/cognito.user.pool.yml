@@ -1,0 +1,25 @@
+Resources:
+  CognitoUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: ${self:provider.stage}-userpool
+      UsernameAttributes:
+        - email
+      AutoVerifiedAttributes:
+        - email
+
+  CognitoUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: ${self:provider.stage}-userpool-client
+      UserPoolId: '#{CognitoUserPool}'
+      ExplicitAuthFlows:
+        - ADMIN_NO_SRP_AUTH
+      GenerateSecret: false
+
+Outputs:
+  UserPoolId:
+    Value: '#{CognitoUserPool}'
+
+  UserPoolClientId:
+    Value: '#{CognitoUserPoolClient}'

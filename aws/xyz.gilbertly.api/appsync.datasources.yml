@@ -1,0 +1,5 @@
+- name: getHelloQueryFn
+  type: AWS_LAMBDA
+  description: Link AppSync, Lambda, and DynamoDB.
+  config:
+    functionName: getHelloQueryFn

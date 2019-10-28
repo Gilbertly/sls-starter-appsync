@@ -1,0 +1,4 @@
+- name: getHelloFunction
+  dataSource: getHelloQueryFn
+  request: ./lambda/req.invoke.vtl
+  response: ./resp.success.vtl

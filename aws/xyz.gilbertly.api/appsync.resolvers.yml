@@ -1,0 +1,6 @@
+- type: Query
+  kind: UNIT
+  field: getHelloQuery
+  dataSource: getHelloQueryFn
+  request: ./lambda/req.invoke.vtl
+  response: ./resp.success.vtl

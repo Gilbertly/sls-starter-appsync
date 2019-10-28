@@ -1,4 +1,0 @@
-- name: testFunction
-  dataSource: ddbTableTest
-  request: ./templates/authorize.request.vtl
-  response: ./templates/common.response.vtl

@@ -1,0 +1,49 @@
+Resources:
+  CognitoIdentityPool:
+    Type: AWS::Cognito::IdentityPool
+    Properties:
+      IdentityPoolName: ${self:provider.stage}IdentityPool
+      AllowUnauthenticatedIdentitied: false
+      CognitoIdentityProviders:
+        - ClientId: '#{CognitoUserPoolClient}'
+          ProviderName: '#{CognitoUserPool.ProviderName}'
+
+  CognitoIdentityPoolRoles:
+    Type: AWS::Cognito::IdentityPoolRoleAttachment
+    Properties:
+      IdentityPoolId: '#{CognitoIdentityPool}'
+      Roles:
+        authenticated: '#{CognitoAuthRole.Arn}'
+
+  CognitoAuthRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: cognito-identity.amazonaws.com
+            Action:
+              - sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                cognito-identity.amazonaws.com:aud: '#{CognitoIdentityPool}'
+              ForAnyValue:StringLike:
+                cognito-identity.amazonaws.com:amr: authenticated
+      Policies:
+        - PolicyName: CognitoAuthorizedPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - mobileanalytics:PutEvents
+                  - cognito-sync:*
+                  - cognito-identity:*
+                Resource: '*'
+
+Outputs:
+  IdentityPoolId:
+    Value: '#{CognitoIdentityPool}'

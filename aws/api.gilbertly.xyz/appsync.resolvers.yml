@@ -1,7 +1,0 @@
-- type: Query
-  field: testPipelineQuery
-  kind: PIPELINE
-  request: ./templates/req.ddb.addPost.vtl
-  response: ./templates/resp.common.vtl
-  functions:
-    - testFunction
