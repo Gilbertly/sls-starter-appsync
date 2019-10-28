@@ -2,5 +2,5 @@
   kind: UNIT
   field: getHello
   dataSource: getHelloQueryFn
-  request: ./lambda/req.invoke.vtl
+  request: ./req.invoke.vtl
   response: ./resp.success.vtl
