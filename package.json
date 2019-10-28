@@ -66,6 +66,7 @@
     "newman": "^4.5.5",
     "ora": "^4.0.2",
     "prettier": "^1.18.2",
+    "rimraf": "^3.0.0",
     "serverless": "^1.55.1",
     "serverless-appsync-plugin": "^1.1.2",
     "serverless-pseudo-parameters": "^2.5.0",
