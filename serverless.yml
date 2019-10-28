@@ -3,7 +3,6 @@ service:
 
 plugins:
   - serverless-webpack
-  - serverless-appsync-offline
   - serverless-appsync-plugin
   - serverless-pseudo-parameters
 
@@ -15,17 +14,6 @@ custom:
     packager: npm
     forceExclude:
       - aws-sdk
-  appsync-offline:
-    port: ${self:custom.config.APPSYNC_PORT, '7979'}
-    schema: ${self:custom.appSync.schema}
-    dynamodb:
-      client:
-        endpoint: http://localhost:${self:custom.config.DDB_PORT, '8000'}
-        # region: localhost
-      # server:
-      #   port: ${self:custom.config.DDB_PORT, '8000'}
-      #   dbPath: ./.dynamodb
-      #   inMemory: true
   appSync:
     name: starter-appsync
     authenticationType: AMAZON_COGNITO_USER_POOLS
@@ -52,6 +40,8 @@ provider:
   logRetentionInDays: 7
   stackName: ${self:provider.stage}-${self:service.name}
   profile: deployuser-${self:provider.stage}
+  tags:
+    project: ${self:provider.stage}-${self:service.name}
   deploymentBucket:
     blockPublicAccess: true
     serverSideEncryption: AES256
