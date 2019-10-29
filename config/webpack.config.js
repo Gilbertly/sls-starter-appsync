@@ -7,7 +7,7 @@ const isLocal = slsw.lib.webpack.isLocal;
 module.exports = {
   entry: slsw.lib.entries,
   mode: isLocal ? 'development' : 'production',
-  devtool: isLocal ? 'inline-source-map' : 'source-map',
+  devtool: 'inline-source-map',
   stats: 'normal',
   output: {
     libraryTarget: 'commonjs',
