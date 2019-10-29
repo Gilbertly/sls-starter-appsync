@@ -71,3 +71,4 @@ build/**
 !**/ssm.*.example
 **/cfn.params.*
 !**/cfn.params.*.example
+**postman**.json
