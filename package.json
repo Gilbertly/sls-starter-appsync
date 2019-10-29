@@ -6,20 +6,25 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "lint:fix": "eslint './src/**/*.{ts,tsx}' --fix",
+    "lint:fix": "eslint './**/*.{ts,tsx}' --fix",
     "lint:test": "npm run lint:fix && jest",
-    "clean:build": "rimraf -f build && npm run build",
+    "clean:build": "rimraf -f build && npm run build && npm run zip:layer",
     "validate:dev": "sls deploy --stage dev --noDeploy",
     "validate:prod": "sls deploy --stage prod --noDeploy",
     "validate:all": "npm run lint:fix && npm audit fix && npm run clean:build",
     "deploy:dev": "npm run validate:dev && npm run validate:all && sls deploy --stage dev",
     "deploy:prod": " npm run validate:prod && npm run validate:all && sls deploy --stage prod",
-    "api:start": "sls appsync-offline start --noAuth",
-    "newman:test:dev": "NODE_ENV=dev ts-node newman.config.ts",
-    "newman:test:prod": "NODE_ENV=prod ts-node newman.config.ts",
+    "install:prod": "cp package.json ./nodejs && cd ./nodejs && npm i --only=prod",
+    "prepare:layer": "rimraf -f ./nodejs dependencies.zip && mkdir -p ./nodejs && npm run install:prod",
+    "zip:layer": "npm run prepare:layer && zip -qr dependencies.zip nodejs && rimraf -f ./nodejs",
+    "newman:test:dev": "NODE_ENV=dev ts-node $npm_package_config_newman",
+    "newman:test:prod": "NODE_ENV=prod ts-node $npm_package_config_newman",
     "ddb:install": "sls dynamodb install",
     "ddb:start": "sls dynamodb start --migrate",
     "cli:cmd": "ts-node ./src/utils/cli.entrypoint.ts --"
+  },
+  "config": {
+    "newman": "./src/__tests__/integration/newman.config.ts"
   },
   "repository": {
     "type": "git",
@@ -44,6 +49,7 @@
     }
   },
   "dependencies": {
+    "@sentry/node": "^5.7.1",
     "aws-sdk": "^2.556.0"
   },
   "devDependencies": {
