@@ -15,6 +15,8 @@
     "deploy:dev": "npm run validate:dev && npm run validate:all && sls deploy --stage dev",
     "deploy:prod": " npm run validate:prod && npm run validate:all && sls deploy --stage prod",
     "api:start": "sls appsync-offline start --noAuth",
+    "newman:test:dev": "NODE_ENV=dev ts-node newman.config.ts",
+    "newman:test:prod": "NODE_ENV=prod ts-node newman.config.ts",
     "ddb:install": "sls dynamodb install",
     "ddb:start": "sls dynamodb start --migrate",
     "cli:cmd": "ts-node ./src/utils/cli.entrypoint.ts --"
