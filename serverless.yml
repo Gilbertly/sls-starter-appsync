@@ -72,10 +72,13 @@ package:
 
 functions:
   getHelloQueryFn:
-    name: ${self:provider.stage}-getHelloQuery
+    name: getHelloQueryFn
     handler: src/functions/getHelloQueryFn.handler
     description: Resolve Appsync <> DynamoDB operations.
+    layers:
+      - !Ref DependenciesLambdaLayer
 
 resources:
+  - ${file(./aws/iam.users.roles.kms.yml)}
   - ${file(./aws/xyz.gilbertly.api/cognito.user.pool.yml)}
   - ${file(./aws/xyz.gilbertly.api/cognito.identity.pool.yml)}
