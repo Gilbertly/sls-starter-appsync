@@ -27,8 +27,11 @@ custom:
     mappingTemplates:
       - ${file(./aws/xyz.gilbertly.api/appsync.resolvers.yml)}
   ssmPath:
-    sentry_dsn: ${ssm:/aws_appsync/sls/sentry_dsn}
-    xyz_gilbertly_api_domain: ${ssm:/aws_appsync/sls/xyz_gilbertly_api_domain}
+    sentry_dsn: ${ssm:/starter_appsync/sentry_dsn}
+    appsync_originid: ${ssm:/starter_appsync/appsync_originid}
+    xyz_gilbertly_domain: ${ssm:/starter_appsync/xyz_gilbertly_domain}
+    xyz_gilbertly_wildcard: ${ssm:/starter_appsync/xyz_gilbertly_wildcard}
+    xyz_gilbertly_api_domain: ${ssm:/starter_appsync/xyz_gilbertly_api_domain}
 
 provider:
   name: aws
@@ -80,6 +83,7 @@ functions:
 
 resources:
   - ${file(./aws/iam.users.roles.kms.yml)}
+  - ${file(./aws/xyz.gilbertly/acm.route53.yml)}
   - ${file(./aws/xyz.gilbertly.api/cognito.user.pool.yml)}
   - ${file(./aws/xyz.gilbertly.api/cognito.identity.pool.yml)}
   - ${file(./aws/xyz.gilbertly.api/cloudfront.route53.yml)}
