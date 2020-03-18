@@ -29,6 +29,7 @@ custom:
   ssmPath:
     sentry_dsn: ${ssm:/starter_appsync/sentry_dsn}
     appsync_originid: ${ssm:/starter_appsync/appsync_originid}
+    userpool_domain: ${ssm:/starter_appsync/userpool_domain}
     xyz_gilbertly_domain: ${ssm:/starter_appsync/xyz_gilbertly_domain}
     xyz_gilbertly_wildcard: ${ssm:/starter_appsync/xyz_gilbertly_wildcard}
     xyz_gilbertly_api_domain: ${ssm:/starter_appsync/xyz_gilbertly_api_domain}
