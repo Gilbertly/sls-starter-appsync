@@ -13,9 +13,21 @@ Resources:
     Properties:
       ClientName: ${self:provider.stage}-userpool-client
       UserPoolId: '#{CognitoUserPool}'
+      GenerateSecret: false
       ExplicitAuthFlows:
         - ADMIN_NO_SRP_AUTH
-      GenerateSecret: false
+      CallbackURLs:
+        - https://app.gilbertly.xyz
+      LogoutURLs:
+        - https://auth.gilbertly.xyz/signout
+
+  CognitoUserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      Domain: ${self:custom.ssmPath.userpool_domain}
+      UserPoolId: '#{CognitoUserPool}'
+      CustomDomainConfig:
+        CertificateArn: '#{AcmCertificateXyzGilbertly}'
 
 Outputs:
   UserPoolId:
