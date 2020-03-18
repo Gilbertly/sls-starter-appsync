@@ -19,7 +19,7 @@ Resources:
       CallbackURLs:
         - https://app.gilbertly.xyz
       LogoutURLs:
-        - https://auth.gilbertly.xyz/signout
+        - https://gilbertly.xyz
 
   CognitoUserPoolDomain:
     Type: AWS::Cognito::UserPoolDomain
