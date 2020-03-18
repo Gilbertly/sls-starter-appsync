@@ -7,7 +7,6 @@ plugins:
   - serverless-pseudo-parameters
 
 custom:
-  config: ${file(./config/env.yml):${opt:stage, 'dev'}}
   webpack:
     webpackConfig: ./config/webpack.config.js
     packagePath: ./package.json
@@ -15,7 +14,7 @@ custom:
     forceExclude:
       - aws-sdk
   appSync:
-    name: starter-appsync
+    name: ${self:service.name}
     authenticationType: AMAZON_COGNITO_USER_POOLS
     schema: ./aws/xyz.gilbertly.api/schema.private.graphql
     mappingTemplatesLocation: ./aws/xyz.gilbertly.api/templates
