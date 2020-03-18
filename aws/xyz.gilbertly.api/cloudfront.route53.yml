@@ -1,40 +1,15 @@
 Resources:
-  AcmCertificateXyzGilbertlyApi:
-    Type: AWS::CertificateManager::Certificate
-    Properties:
-      DomainName: ${self:custom.ssmPath.xyz_gilbertly_api_domain}
-      ValidationMethod: DNS
-
-  Route53HostedZoneXyzGilbertlyApi:
-    Type: AWS::Route53::HostedZone
-    Properties:
-      Name: ${self:custom.ssmPath.xyz_gilbertly_api_domain}
-      HostedZoneConfig:
-        Comment: ${self:custom.ssmPath.xyz_gilbertly_api_domain}
-
-  Route53RecordSetGroupXyzGilbertlyApi:
-    Type: AWS::Route53::RecordSetGroup
-    Properties:
-      Comment: ${self:custom.ssmPath.xyz_gilbertly_api_domain}
-      HostedZoneId: '#{Route53HostedZoneXyzGilbertlyApi}'
-      RecordSets:
-        - Name: ${self:custom.ssmPath.xyz_gilbertly_api_domain}
-          Type: A
-          AliasTarget:
-            HostedZoneId: Z2FDTNDATAQYW2 # CloudFront's Magic Number
-            DNSName: '#{CloudFrontDistributionXyzGilbertlyApi.DomainName}'
-
-  CloudFrontDistributionComGilbertly:
+  CloudFrontDistributionXyzGilbertlyApi:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
         Origins:
-          - Id: '#{GraphQlApi.GraphQLUrl}'
-            DomainName: '#{GraphQlApi.GraphQLUrl}'
+          - Id: ${self:custom.ssmPath.appsync_originid}
+            DomainName: ${self:custom.ssmPath.appsync_originid}
             CustomOriginConfig:
               HTTPPort: 80
               HTTPSPort: 443
-              OriginKeepAliveTimeout: 5
+              OriginKeepaliveTimeout: 5
               OriginReadTimeout: 30
               OriginProtocolPolicy: https-only
               OriginSSLProtocols: [TLSv1, TLSv1.1, TLSv1.2]
@@ -43,14 +18,14 @@ Resources:
           DefaultTTL: 3600 # 1 hour
           MaxTTL: 86400 # 24 hours
           MinTTL: 60 # 1 minute
-          TargetOriginId: '#{GraphQlApi.GraphQLUrl}'
-          AllowedMethods: [GET, HEAD, DELETE, POST, PUT]
+          TargetOriginId: ${self:custom.ssmPath.appsync_originid}
+          AllowedMethods: [HEAD, DELETE, POST, GET, OPTIONS, PUT, PATCH]
           ForwardedValues:
             QueryString: false
           SmoothStreaming: false
           ViewerProtocolPolicy: redirect-to-https
         ViewerCertificate:
-          AcmCertificateArn: '#{AcmCertificateXyzGilbertlyApi}'
+          AcmCertificateArn: '#{AcmCertificateXyzGilbertly}'
           SslSupportMethod: sni-only
           MinimumProtocolVersion: TLSv1.1_2016
         Aliases:
@@ -58,10 +33,3 @@ Resources:
         PriceClass: PriceClass_All
         HttpVersion: http2
         Enabled: true
-
-Outputs:
-  Route53HostedZoneXyzGilbertlyApiId:
-    Description: Hosted zone id for ${self:custom.ssmPath.xyz_gilbertly_api_domain}.
-    Value: '#{Route53HostedZoneXyzGilbertlyApi}'
-    Export:
-      Name: HostedZoneId-XyzGilbertlyApi
