@@ -1,0 +1,6 @@
+- type: Query
+  kind: UNIT
+  field: getHello
+  dataSource: getHelloQuery
+  request: ./req.invoke.vtl
+  response: ./resp.success.vtl

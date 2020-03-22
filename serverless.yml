@@ -3,43 +3,36 @@ service:
 
 plugins:
   - serverless-webpack
-  - serverless-appsync-offline
   - serverless-appsync-plugin
   - serverless-pseudo-parameters
 
 custom:
-  config: ${file(./config/env.yml):${opt:stage, 'dev'}}
   webpack:
     webpackConfig: ./config/webpack.config.js
     packagePath: ./package.json
     packager: npm
     forceExclude:
       - aws-sdk
-  appsync-offline:
-    port: ${self:custom.config.APPSYNC_PORT, '7979'}
-    dynamodb:
-      client:
-        endpoint: http://localhost:${self:custom.config.DDB_PORT, '8000'}
-        region: localhost
-      server:
-        port: ${self:custom.config.DDB_PORT, '8000'}
-        dbPath: ./.dynamodb
-        inMemory: true
   appSync:
-    name: starter-appsync
+    name: ${self:service.name}
     authenticationType: AMAZON_COGNITO_USER_POOLS
-    schema: ${file(./aws/schema.graphql)}
+    schema: ./aws/xyz.gilbertly.api/schema.private.graphql
+    mappingTemplatesLocation: ./aws/xyz.gilbertly.api/templates
     userPoolConfig:
       awsRegion: ${self:provider.region}
       defaultAction: ALLOW
-      userPoolId:
-      appIdClientRegex:
-    functionConfigurations:
-      - ${file(./aws/appsync.functions.yml)}
+      userPoolId: '#{CognitoUserPool}'
     dataSources:
-      - ${file(./aws/appsync.datasources.yml)}
+      - ${file(./aws/xyz.gilbertly.api/appsync.datasources.yml)}
     mappingTemplates:
-      - ${file(./aws/appsync.resolvers.yml)}
+      - ${file(./aws/xyz.gilbertly.api/appsync.resolvers.yml)}
+  ssmPath:
+    sentry_dsn: ${ssm:/starter_appsync/sentry_dsn}
+    appsync_originid: ${ssm:/starter_appsync/appsync_originid}
+    userpool_domain: ${ssm:/starter_appsync/userpool_domain}
+    xyz_gilbertly_domain: ${ssm:/starter_appsync/xyz_gilbertly_domain}
+    xyz_gilbertly_wildcard: ${ssm:/starter_appsync/xyz_gilbertly_wildcard}
+    xyz_gilbertly_api_domain: ${ssm:/starter_appsync/xyz_gilbertly_api_domain}
 
 provider:
   name: aws
@@ -49,9 +42,25 @@ provider:
   stage: ${opt:region, 'dev'}
   region: ${opt:region, 'us-east-1'}
   logRetentionInDays: 7
+  stackName: ${self:provider.stage}-${self:service.name}
+  profile: deployuser-${self:provider.stage}
+  tags:
+    project: ${self:provider.stage}-${self:service.name}
   deploymentBucket:
     blockPublicAccess: true
     serverSideEncryption: AES256
+  environment:
+    SENTRY_DSN: ${self:custom.ssmPath.sentry_dsn}
+
+layers:
+  dependencies:
+    name: appsync_starter
+    description: Appsync lambda dependencies.
+    package:
+      artifact: dependencies.zip
+    compatibleRuntimes:
+      - nodejs10.x
+    licenseInfo: MIT
 
 package:
   exclude:
@@ -65,6 +74,17 @@ package:
     - src/**
   excludeDevDependencies: true
 
+functions:
+  getHelloQueryFn:
+    name: getHelloQueryFn
+    handler: src/functions/getHelloQueryFn.handler
+    description: Resolve Appsync <> DynamoDB operations.
+    layers:
+      - !Ref DependenciesLambdaLayer
+
 resources:
-  - ${file(./aws/iam.roles.kms.yml)}
-  - ${file(./aws/cognito.userpools.yml)}
+  - ${file(./aws/iam.users.roles.kms.yml)}
+  - ${file(./aws/xyz.gilbertly/acm.route53.yml)}
+  - ${file(./aws/xyz.gilbertly.api/cognito.user.pool.yml)}
+  - ${file(./aws/xyz.gilbertly.api/cognito.identity.pool.yml)}
+  - ${file(./aws/xyz.gilbertly.api/cloudfront.route53.yml)}

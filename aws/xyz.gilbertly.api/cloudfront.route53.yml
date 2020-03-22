@@ -1,0 +1,35 @@
+Resources:
+  CloudFrontDistributionXyzGilbertlyApi:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins:
+          - Id: ${self:custom.ssmPath.appsync_originid}
+            DomainName: ${self:custom.ssmPath.appsync_originid}
+            CustomOriginConfig:
+              HTTPPort: 80
+              HTTPSPort: 443
+              OriginKeepaliveTimeout: 5
+              OriginReadTimeout: 30
+              OriginProtocolPolicy: https-only
+              OriginSSLProtocols: [TLSv1, TLSv1.1, TLSv1.2]
+        DefaultCacheBehavior:
+          Compress: true
+          DefaultTTL: 3600 # 1 hour
+          MaxTTL: 86400 # 24 hours
+          MinTTL: 60 # 1 minute
+          TargetOriginId: ${self:custom.ssmPath.appsync_originid}
+          AllowedMethods: [HEAD, DELETE, POST, GET, OPTIONS, PUT, PATCH]
+          ForwardedValues:
+            QueryString: false
+          SmoothStreaming: false
+          ViewerProtocolPolicy: redirect-to-https
+        ViewerCertificate:
+          AcmCertificateArn: '#{AcmCertificateXyzGilbertly}'
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.1_2016
+        Aliases:
+          - ${self:custom.ssmPath.xyz_gilbertly_api_domain}
+        PriceClass: PriceClass_All
+        HttpVersion: http2
+        Enabled: true

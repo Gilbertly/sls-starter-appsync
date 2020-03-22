@@ -1,0 +1,4 @@
+- name: getHelloFunction
+  dataSource: getHelloQueryFn
+  request: ./req.invoke.vtl
+  response: ./resp.success.vtl
