@@ -88,3 +88,4 @@ resources:
   - ${file(./aws/xyz.gilbertly.api/cognito.user.pool.yml)}
   - ${file(./aws/xyz.gilbertly.api/cognito.identity.pool.yml)}
   - ${file(./aws/xyz.gilbertly.api/cloudfront.route53.yml)}
+  - ${file(./aws/analytics.streams.yml)}
