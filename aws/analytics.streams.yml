@@ -1,0 +1,5 @@
+Resources:
+  PinpointAppAnalytics:
+    Type: AWS::Pinpoint::App
+    Properties:
+      Name: ${self:service.name}-analytics
