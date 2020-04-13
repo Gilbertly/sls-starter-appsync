@@ -1,0 +1,13 @@
+Resources:
+  ItemsDynamodbTable:
+    Type: AWS::DynamoDB::Table
+    UpdateReplacePolicy: Retain
+    Properties:
+      TableName: ${self:provider.stage}-${self:service.name}-items
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+        - AttributeName: item_id
+          KeyType: HASH
+      AttributeDefinitions:
+        - AttributeName: item_id
+          AttributeType: S
