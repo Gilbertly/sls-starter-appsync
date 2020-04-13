@@ -32,20 +32,9 @@
   },
   "author": "Gilbert Gathara",
   "license": "MIT",
-  "eslintIgnore": [
-    "build/*",
-    "node_modules/*"
-  ],
-  "prettier": {
-    "trailingComma": "all",
-    "tabWidth": 2,
-    "semi": true,
-    "singleQuote": true
-  },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint:fix",
-      "pre-push": "npm run validate:all"
+      "pre-commit": "npm run lint:fix"
     }
   },
   "dependencies": {
