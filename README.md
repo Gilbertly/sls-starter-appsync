@@ -1,12 +1,14 @@
 # sls-starter-appsync
 
-Serverless starter kit for DNS, CDN, Auth, and ACM resources (GraphQL front-door).
+Serverless starter kit for GraphQL resources to integrate frontend and backend.
 
 ## Setup
 
-### AppSync, CloudFront, and Route53
+```sh
+// deploy dev resources
+$ npm run deploy:dev
 
-- Deploy appsync, route53, and acm config.
-- Manually copy the originid from appsync; this is the appsync url without the 'https://' and the trailing '/graphql'.
-- Add the originid value to ssm.
-- Add route53 recordsetgroup config, referencing cloudfront.
+// copy originid from appsync
+// remove starting 'https://' & the trailing '/graphql'
+// add the new originid in the domains repo
+```
