@@ -1,0 +1,5 @@
+- type: AWS_LAMBDA
+  name: getHelloQuery
+  config:
+    functionName: getHelloQueryFn
+    serviceRoleArn: !GetAtt AppSyncLambdaRole.Arn

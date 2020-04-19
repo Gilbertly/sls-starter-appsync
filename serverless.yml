@@ -16,23 +16,18 @@ custom:
   appSync:
     name: ${self:service.name}
     authenticationType: AMAZON_COGNITO_USER_POOLS
-    schema: ./aws/xyz.gilbertly.api/schema.private.graphql
-    mappingTemplatesLocation: ./aws/xyz.gilbertly.api/templates
+    schema: ./aws/schema_private.graphql
+    mappingTemplatesLocation: ./aws/templates
     userPoolConfig:
       awsRegion: ${self:provider.region}
       defaultAction: ALLOW
-      userPoolId: '#{CognitoUserPool}'
+      userPoolId: !Ref CognitoUserPool
     dataSources:
-      - ${file(./aws/xyz.gilbertly.api/appsync.datasources.yml)}
+      - ${file(./aws/appsync_datasources.yml)}
     mappingTemplates:
-      - ${file(./aws/xyz.gilbertly.api/appsync.resolvers.yml)}
+      - ${file(./aws/appsync_resolvers.yml)}
   ssmPath:
     sentry_dsn: ${ssm:/starter_appsync/sentry_dsn}
-    appsync_originid: ${ssm:/starter_appsync/appsync_originid}
-    userpool_domain: ${ssm:/starter_appsync/userpool_domain}
-    xyz_gilbertly_domain: ${ssm:/starter_appsync/xyz_gilbertly_domain}
-    xyz_gilbertly_wildcard: ${ssm:/starter_appsync/xyz_gilbertly_wildcard}
-    xyz_gilbertly_api_domain: ${ssm:/starter_appsync/xyz_gilbertly_api_domain}
 
 provider:
   name: aws
@@ -54,7 +49,7 @@ provider:
 
 layers:
   dependencies:
-    name: appsync_starter
+    name: ${self:provider.stage}-${self:service.name}
     description: Appsync lambda dependencies.
     package:
       artifact: dependencies.zip
@@ -83,9 +78,8 @@ functions:
       - !Ref DependenciesLambdaLayer
 
 resources:
-  - ${file(./aws/iam.users.roles.kms.yml)}
-  - ${file(./aws/xyz.gilbertly/acm.route53.yml)}
-  - ${file(./aws/xyz.gilbertly.api/cognito.user.pool.yml)}
-  - ${file(./aws/xyz.gilbertly.api/cognito.identity.pool.yml)}
-  - ${file(./aws/xyz.gilbertly.api/cloudfront.route53.yml)}
-  - ${file(./aws/analytics.streams.yml)}
+  - ${file(./aws/iam_permissions.yml)}
+  - ${file(./aws/ddb_items.yml)}
+  - ${file(./aws/cognito_userpool.yml)}
+  - ${file(./aws/cognito_identitypool.yml)}
+  - ${file(./aws/stream_analytics.yml)}

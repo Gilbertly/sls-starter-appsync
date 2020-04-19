@@ -3,7 +3,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       Path: /
-      RoleName: ${self:provider.stage}_cognito_auth_role
+      RoleName: ${self:service.name}-cognito-auth-role
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -37,7 +37,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       Path: /
-      RoleName: ${self:provider.stage}_cognito_unauth_role
+      RoleName: ${self:service.name}-cognito-unauth-role
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -67,7 +67,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       Path: /
-      RoleName: ${self:provider.stage}_appsync_lambda_role
+      RoleName: ${self:service.name}-lambda-role
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
