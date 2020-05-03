@@ -147,7 +147,7 @@ export const build = (): yargs.CommandModule => {
   };
 
   return {
-    command: 'ssm.download <path> <filename>',
+    command: 'ssmDownload <path> <filename>',
     describe: 'Pulls AWS SSM parameters into local file.',
     handler: (args: any) => download(args).catch(console.error),
     builder: (args: yargs.Argv) =>
