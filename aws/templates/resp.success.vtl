@@ -1,1 +1,5 @@
-$utils.toJson($context.result)
+#if($ctx.result.statusCode == 200)
+  $utils.toJson($context.result)
+#else
+  $utils.appendError($utils.xml.toJsonString($ctx.result.body), "$ctx.result.statusCode")
+#end
