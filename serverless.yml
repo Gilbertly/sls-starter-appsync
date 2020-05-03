@@ -14,20 +14,20 @@ custom:
     forceExclude:
       - aws-sdk
   appSync:
-    name: ${self:service.name}
+    name: ${self:provider.stage}-${self:service.name}
     authenticationType: AMAZON_COGNITO_USER_POOLS
-    schema: ./aws/schema_private.graphql
+    schema: ./aws/schema.graphql
     mappingTemplatesLocation: ./aws/templates
     userPoolConfig:
       awsRegion: ${self:provider.region}
-      defaultAction: ALLOW
+      defaultAction: DENY
       userPoolId: !Ref CognitoUserPool
     dataSources:
       - ${file(./aws/appsync_datasources.yml)}
     mappingTemplates:
       - ${file(./aws/appsync_resolvers.yml)}
   ssmPath:
-    sentry_dsn: ${ssm:/starter_appsync/sentry_dsn}
+    sentry_dsn: ${ssm:/starter_appsync/sentry_dsn, ''}
 
 provider:
   name: aws
@@ -73,13 +73,20 @@ functions:
   getHelloQueryFn:
     name: getHelloQueryFn
     handler: src/functions/getHelloQueryFn.handler
-    description: Resolve Appsync <> DynamoDB operations.
+    description: Resolve greetings query from appsync.
+    layers:
+      - !Ref DependenciesLambdaLayer
+
+  processMutationsFn:
+    name: processMutationsFn
+    handler: src/functions/processMutationsFn.handler
+    description: Process mutations destined for dynamodb items table.
     layers:
       - !Ref DependenciesLambdaLayer
 
 resources:
   - ${file(./aws/iam_permissions.yml)}
-  - ${file(./aws/ddb_items.yml)}
+  - ${file(./aws/dynamodb_tables.yml)}
   - ${file(./aws/cognito_userpool.yml)}
   - ${file(./aws/cognito_identitypool.yml)}
   - ${file(./aws/stream_analytics.yml)}
