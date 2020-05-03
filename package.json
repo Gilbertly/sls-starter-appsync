@@ -8,20 +8,20 @@
     "watch": "tsc -w",
     "lint:fix": "eslint './**/*.{ts,tsx}' --fix",
     "lint:test": "npm run lint:fix && jest",
-    "clean:build": "rimraf -f build && npm run build && npm run zip:layer",
-    "validate:sls:dev": "sls deploy --stage dev --noDeploy",
-    "validate:sls:prod": "sls deploy --stage prod --noDeploy",
-    "validate:all": "npm run lint:fix && npm audit fix && npm run clean:build",
-    "deploy:dev": "npm run validate:dev && npm run validate:all && sls deploy --stage dev",
-    "deploy:prod": " npm run validate:prod && npm run validate:all && sls deploy --stage prod",
-    "install:prod": "cp package.json ./nodejs && cd ./nodejs && npm i --only=prod",
-    "prepare:layer": "rimraf -f ./nodejs dependencies.zip && mkdir -p ./nodejs && npm run install:prod",
-    "zip:layer": "npm run prepare:layer && zip -qr dependencies.zip nodejs && rimraf -f ./nodejs",
-    "newman:test:dev": "NODE_ENV=dev ts-node ./src/utils/cli.entrypoint.ts newman",
-    "newman:test:prod": "NODE_ENV=prod ts-node ./src/utils/cli.entrypoint.ts newman",
+    "layer:prepare": "rimraf -f ./nodejs dependencies.zip && npm run layer:install && npm run layer:zip",
+    "layer:install": "mkdir -p ./nodejs && cp package.json ./nodejs && cd ./nodejs && npm i --only=prod",
+    "layer:zip": "zip -qr dependencies.zip nodejs && rimraf -f ./nodejs",
+    "clean:build": "rimraf -f build && npm run build && npm run layer:prepare",
+    "validate:sls": "sls deploy --stage dev --noDeploy",
+    "validate:all": "npm run lint:test && npm run clean:build",
+    "deploy:dev": "npm run validate:all && sls deploy --stage dev",
+    "deploy:prod": "npm run validate:all && sls deploy --stage prod",
+    "newman:test": "ts-node ./src/utils/cli.ts newman",
     "ddb:install": "sls dynamodb install",
     "ddb:start": "sls dynamodb start --migrate",
-    "cli:cmd": "ts-node ./src/utils/cli.entrypoint.ts"
+    "ssm:download": "ts-node ./src/utils/cli.ts ssmDownload",
+    "ssm:update": "ts-node ./src/utils/cli.ts ssmUpdate",
+    "ssm:delete": "ts-node ./src/utils/cli.ts ssmDelete"
   },
   "repository": {
     "type": "git",
@@ -31,12 +31,13 @@
   "license": "MIT",
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint:fix"
+      "pre-commit": "npm run lint:fix",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
   "dependencies": {
     "@sentry/node": "^5.15.5",
-    "aws-sdk": "^2.666.0"
+    "aws-sdk": "^2.668.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
@@ -56,7 +57,7 @@
     "eslint-plugin-graphql": "^3.1.1",
     "eslint-plugin-prettier": "^3.1.3",
     "husky": "^4.2.5",
-    "jest": "^25.5.2",
+    "jest": "^25.5.4",
     "newman": "^5.0.0",
     "ora": "^4.0.4",
     "prettier": "^2.0.5",
@@ -67,7 +68,7 @@
     "serverless-webpack": "^5.3.1",
     "ts-jest": "^25.4.0",
     "ts-loader": "^7.0.2",
-    "ts-node": "^8.9.1",
+    "ts-node": "^8.10.1",
     "typescript": "^3.8.3",
     "webpack": "^4.43.0",
     "webpack-node-externals": "^1.7.2",
