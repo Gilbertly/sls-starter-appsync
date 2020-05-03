@@ -2,4 +2,15 @@
   name: getHelloQuery
   config:
     functionName: getHelloQueryFn
-    serviceRoleArn: !GetAtt AppSyncLambdaRole.Arn
+    serviceRoleArn: !GetAtt AppSyncServiceRole.Arn
+
+- type: HTTP
+  name: SqsMutations
+  config:
+    endpoint: !Ref SQSMutationsQueue
+    serviceRoleArn: !GetAtt AppSyncServiceRole.Arn
+    authorizationConfig:
+      authorizationType: AWS_IAM
+      awsIamConfig:
+        signingServiceName: sqs
+        signingRegion: ${self:provider.region}

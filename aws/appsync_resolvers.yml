@@ -1,6 +1,11 @@
 - type: Query
-  kind: UNIT
   field: getHello
   dataSource: getHelloQuery
-  request: ./req.invoke.vtl
-  response: ./resp.success.vtl
+  request: ./req_invoke.vtl
+  response: ./resp_success.vtl
+
+- type: Mutation
+  field: addHello
+  dataSource: SqsMutations
+  request: ./sqs_invoke.vtl
+  response: ./resp_success.vtl
