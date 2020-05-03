@@ -63,7 +63,7 @@ Resources:
                   - cognito-identity:*
                 Resource: '*'
 
-  AppSyncLambdaRole:
+  AppSyncServiceRole:
     Type: AWS::IAM::Role
     Properties:
       Path: /
@@ -87,3 +87,13 @@ Resources:
                   - lambda:InvokeFunction
                 Resource:
                   - 'arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:*'
+
+        - PolicyName: AppSyncSQSPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - sqs:SendMessage
+                Resource:
+                  - !GetAtt SQSMutationsQueue.Arn
