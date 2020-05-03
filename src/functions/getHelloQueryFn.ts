@@ -1,6 +1,6 @@
 import { Context } from 'aws-lambda';
 import * as Sentry from '@sentry/node';
-import { AppSyncLambdaEvent } from '../utils/appsync.lambda';
+import { AppSyncLambdaEvent } from '../utils/appsyncLambda';
 
 Sentry.init({ dsn: process.env.SENTRY_DSN });
 
