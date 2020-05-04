@@ -1,0 +1,20 @@
+#set($action = "Action=SendMessage")
+#set($version = "Version=2012-11-05")
+#set($queueurl = "QueueUrl=${SQSMutationsQueue}")
+
+#set($payload = $ctx.arguments.data)
+$util.qr($payload.put("action", "DELETE"))
+$util.qr($payload.put("identity", $ctx.identity))
+#set($msgbody = "MessageBody=$util.base64Encode($payload)")
+
+{
+  "version": "2018-05-29",
+  "method": "POST",
+  "resourcePath": "/",
+  "params": {
+    "headers": {
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    "body": "$action&$version&$queueurl&$msgbody"
+  }
+}

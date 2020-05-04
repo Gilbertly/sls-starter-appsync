@@ -7,5 +7,5 @@
 - type: Mutation
   field: addHello
   dataSource: SqsMutations
-  request: ./sqs_invoke.vtl
+  request: ./sqs_invoke_add.vtl
   response: ./resp_success.vtl
