@@ -20,7 +20,7 @@ custom:
     mappingTemplatesLocation: ./aws/templates
     userPoolConfig:
       awsRegion: ${self:provider.region}
-      defaultAction: DENY
+      defaultAction: ALLOW
       userPoolId: !Ref CognitoUserPool
     dataSources:
       - ${file(./aws/appsync_datasources.yml)}
@@ -73,14 +73,14 @@ functions:
   getHelloQueryFn:
     name: getHelloQueryFn
     handler: src/functions/getHelloQueryFn.handler
-    description: Resolve greetings query from appsync.
+    description: Sample appsync query.
     layers:
       - !Ref DependenciesLambdaLayer
 
-  processMutationsFn:
-    name: processMutationsFn
-    handler: src/functions/processMutationsFn.handler
-    description: Process mutations destined for dynamodb items table.
+  addHelloMutationFn:
+    name: addHelloMutationFn
+    handler: src/functions/addHelloMutationFn.handler
+    description: Sample appsync mutation.
     layers:
       - !Ref DependenciesLambdaLayer
 
