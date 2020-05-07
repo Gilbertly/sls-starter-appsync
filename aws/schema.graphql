@@ -7,7 +7,7 @@ type Query {
 }
 
 type Mutation {
-  addHello: Hello
+  addHello(name: String): String
 }
 
 schema {
