@@ -1,5 +1,5 @@
 interface AppSyncLambdaEvent {
-  username: string;
+  identity: {};
   arguments: {};
 }
 
