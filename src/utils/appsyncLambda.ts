@@ -1,6 +1,6 @@
 interface AppSyncLambdaEvent {
   identity: {};
-  arguments: {};
+  arguments?: any;
 }
 
 export { AppSyncLambdaEvent };
