@@ -6,6 +6,6 @@
 
 - type: Mutation
   field: addHello
-  dataSource: SqsMutations
-  request: ./sqs_invoke_add.vtl
+  dataSource: addHelloMutation
+  request: ./req_invoke.vtl
   response: ./resp_success.vtl
