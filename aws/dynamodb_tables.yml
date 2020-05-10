@@ -1,10 +1,4 @@
 Resources:
-  SQSMutationsQueue:
-    Type: AWS::SQS::Queue
-    Properties:
-      QueueName: ${self:provider.stage}-appsync-mutations
-      MessageRetentionPeriod: 604800 # 7 days
-
   ItemsDynamodbTable:
     Type: AWS::DynamoDB::Table
     UpdateReplacePolicy: Retain
