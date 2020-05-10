@@ -7,6 +7,8 @@ Resources:
         - email
       AutoVerifiedAttributes:
         - email
+      LambdaConfig:
+        PostConfirmation: !GetAtt PostConfirmFnLambdaFunction.Arn
 
   CognitoUserPoolClient:
     Type: AWS::Cognito::UserPoolClient
