@@ -10,11 +10,10 @@ Resources:
           - Effect: Allow
             Principal:
               Federated: cognito-identity.amazonaws.com
-            Action:
-              - sts:AssumeRoleWithWebIdentity
+            Action: sts:AssumeRoleWithWebIdentity
             Condition:
               StringEquals:
-                cognito-identity.amazonaws.com:aud: '#{CognitoIdentityPool}'
+                cognito-identity.amazonaws.com:aud: !Ref CognitoIdentityPool
               ForAnyValue:StringLike:
                 cognito-identity.amazonaws.com:amr: authenticated
       Policies:
@@ -29,8 +28,7 @@ Resources:
                   - cognito-identity:*
                 Resource: '*'
               - Effect: Allow
-                Action:
-                  - execute-api:Invoke
+                Action: execute-api:Invoke
                 Resource: '*'
 
   CognitoUnauthRole:
@@ -44,11 +42,10 @@ Resources:
           - Effect: Allow
             Principal:
               Federated: cognito-identity.amazonaws.com
-            Action:
-              - sts:AssumeRoleWithWebIdentity
+            Action: sts:AssumeRoleWithWebIdentity
             Condition:
               StringEquals:
-                cognito-identity.amazonaws.com:aud: '#{CognitoIdentityPool}'
+                cognito-identity.amazonaws.com:aud: !Ref CognitoIdentityPool
               ForAnyValue:StringLike:
                 cognito-identity.amazonaws.com:amr: unauthenticated
       Policies:
@@ -73,27 +70,22 @@ Resources:
         Statement:
           - Effect: Allow
             Principal:
-              Service:
-                - appsync.amazonaws.com
-            Action:
-              - sts:AssumeRole
+              Service: appsync.amazonaws.com
+            Action: sts:AssumeRole
       Policies:
         - PolicyName: AppSyncLambdaPolicy
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
               - Effect: Allow
-                Action:
-                  - lambda:InvokeFunction
+                Action: lambda:InvokeFunction
                 Resource:
                   - 'arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:*'
 
-        - PolicyName: AppSyncSQSPolicy
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - sqs:SendMessage
-                Resource:
-                  - !GetAtt SQSMutationsQueue.Arn
+  CognitoPostConfirmTriggerPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt PostConfirmFnLambdaFunction.Arn
+      Principal: cognito-idp.amazonaws.com
+      SourceArn: !GetAtt CognitoUserPool.Arn
