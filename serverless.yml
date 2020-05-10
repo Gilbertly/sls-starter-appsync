@@ -4,6 +4,7 @@ service:
 plugins:
   - serverless-webpack
   - serverless-appsync-plugin
+  - serverless-iam-roles-per-function
   - serverless-pseudo-parameters
 
 custom:
@@ -26,12 +27,14 @@ custom:
       - ${file(./aws/appsync_datasources.yml)}
     mappingTemplates:
       - ${file(./aws/appsync_resolvers.yml)}
+  serverless-iam-roles-per-function:
+    defaultInherit: true
   ssmPath:
     sentry_dsn: ${ssm:/starter_appsync/sentry_dsn, ''}
 
 provider:
   name: aws
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   timeout: 10 # seconds
   memorySize: 512
   stage: ${opt:region, 'dev'}
@@ -54,7 +57,7 @@ layers:
     package:
       artifact: dependencies.zip
     compatibleRuntimes:
-      - nodejs10.x
+      - nodejs12.x
     licenseInfo: MIT
 
 package:
@@ -81,6 +84,19 @@ functions:
     name: addHelloMutationFn
     handler: src/functions/addHelloMutationFn.handler
     description: Sample appsync mutation.
+    layers:
+      - !Ref DependenciesLambdaLayer
+
+  postConfirmFn:
+    name: postConfirmFn
+    handler: src/functions/postConfirmFn.handler
+    description: Triggers after a user confirms their email.
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - cognito-idp:AdminAddUserToGroup
+          - cognito-idp:AdminRemoveUserFromGroup
+        Resource: '*'
     layers:
       - !Ref DependenciesLambdaLayer
 
