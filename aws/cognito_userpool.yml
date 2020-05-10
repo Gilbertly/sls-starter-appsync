@@ -21,6 +21,30 @@ Resources:
       LogoutURLs: # un-authenticated landing page
         - https://gilbertly.xyz
 
+  CognitoUserGroupBasic:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties:
+      GroupName: BASIC
+      UserPoolId: !Ref CognitoUserPool
+      Description: Basic/free access to backend resources.
+      Precedence: 30
+
+  CognitoUserGroupStarter:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties:
+      GroupName: STARTER
+      UserPoolId: !Ref CognitoUserPool
+      Description: Starter paid access to backend resources.
+      Precedence: 20
+
+  CognitoUserGroupPremium:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties:
+      GroupName: PREMIUM
+      UserPoolId: !Ref CognitoUserPool
+      Description: Premium paid access to backend resources.
+      Precedence: 10
+
 Outputs:
   UserPoolId:
     Description: ${self:service.name} userpool id.
