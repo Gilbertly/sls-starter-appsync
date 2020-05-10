@@ -6,8 +6,8 @@ Resources:
       TableName: ${self:provider.stage}-${self:service.name}-items
       BillingMode: PAY_PER_REQUEST
       KeySchema:
-        - AttributeName: item_id
+        - AttributeName: itemID
           KeyType: HASH
       AttributeDefinitions:
-        - AttributeName: item_id
+        - AttributeName: itemID
           AttributeType: S

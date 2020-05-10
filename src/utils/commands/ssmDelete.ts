@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import * as yargs from 'yargs';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -9,12 +8,12 @@ const spinner = ora({ spinner: 'bouncingBar' });
 const ssm = new SSM({ region: process.env.REGION || 'us-east-1' });
 
 export const build = (): yargs.CommandModule => {
-  interface SSMDownloadProps {
+  interface SSMDeleteProps {
     filename: string;
   }
 
-  const readFile = (filename: string): SSM.PutParameterRequest[] => {
-    let ssmParams: SSM.PutParameterRequest[] = [];
+  const readFile = (filename: string): SSM.DeleteParameterRequest[] => {
+    let ssmParams: SSM.DeleteParameterRequest[] = [];
     try {
       const filepath = path.resolve(
         __dirname,
@@ -29,21 +28,17 @@ export const build = (): yargs.CommandModule => {
     return ssmParams;
   };
 
-  const updateParameters = async (params: SSM.PutParameterRequest[]) => {
+  const deleteParameters = async (params: SSM.DeleteParameterRequest[]) => {
     await Promise.all(
       params.map(async (param) => {
         try {
           await ssm
-            .putParameter({
+            .deleteParameter({
               Name: param.Name,
-              Type: param.Type,
-              Value: param.Value,
-              Description: param.Description,
-              Overwrite: param.Overwrite,
             })
             .promise();
         } catch (error) {
-          if (error.code !== 'ParameterAlreadyExists') {
+          if (error.code !== 'ParameterNotFound') {
             spinner.stop();
             throw error;
           }
@@ -52,20 +47,20 @@ export const build = (): yargs.CommandModule => {
     );
   };
 
-  const update = async (args: SSMDownloadProps) => {
+  const deleteCmd = async (args: SSMDeleteProps) => {
     const ssmFilename = args.filename;
     spinner.start(
-      `Updating SSM params from './config/ssm.${ssmFilename}.json' ...`,
+      `Deleting SSM params from './config/ssm.${ssmFilename}.json' ...`,
     );
     const ssmParams = readFile(ssmFilename);
-    await updateParameters(ssmParams);
-    spinner.succeed(`Updated '${ssmParams.length}' ssm parameters!`);
+    await deleteParameters(ssmParams);
+    spinner.succeed(`Deleted '${ssmParams.length}' ssm parameters!`);
   };
 
   return {
-    command: 'ssm.update <filename>',
-    describe: 'Updates AWS SSM parameters from local file.',
-    handler: (args: any) => update(args).catch(console.error),
+    command: 'ssmDelete <filename>',
+    describe: 'Deletes AWS SSM parameters from local file.',
+    handler: (args: any) => deleteCmd(args).catch(console.error),
     builder: (args: yargs.Argv) =>
       args.option('filename', { type: 'string' }).demandOption('filename'),
   };

@@ -1,0 +1,16 @@
+type Hello {
+  name: String!
+}
+
+type Query {
+  getHello: Hello
+}
+
+type Mutation {
+  addHello(name: String): String
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}

@@ -1,11 +1,12 @@
-import * as DynamoDB from 'aws-sdk/clients/dynamodb';
-import * as Sentry from '@sentry/node';
 import { Context } from 'aws-lambda';
+import * as Sentry from '@sentry/node';
 import { AppSyncLambdaEvent } from '../utils/appsyncLambda';
-import { getItem } from '../models/tableItems';
 
 Sentry.init({ dsn: process.env.SENTRY_DSN });
-const documentClient = new DynamoDB.DocumentClient();
+
+const addHello = (username: {}): {} => {
+  return username;
+};
 
 exports.handler = async (
   event: AppSyncLambdaEvent,
@@ -16,13 +17,12 @@ exports.handler = async (
 
   try {
     console.log(`Processing event ...`);
-    response = getItem(documentClient, {
-      tableName: process.env.TABLE_ITEMS || '',
-      itemId: event.arguments.itemId || '',
-    });
+    response = addHello(event.identity);
   } catch (error) {
     Sentry.captureException(error);
   }
 
   return response;
 };
+
+export { addHello };

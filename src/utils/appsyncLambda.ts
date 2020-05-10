@@ -1,6 +1,6 @@
 interface AppSyncLambdaEvent {
-  username: string;
-  arguments: {};
+  identity: {};
+  arguments?: any;
 }
 
 export { AppSyncLambdaEvent };

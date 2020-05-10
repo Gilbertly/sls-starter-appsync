@@ -2,4 +2,10 @@
   name: getHelloQuery
   config:
     functionName: getHelloQueryFn
-    serviceRoleArn: !GetAtt AppSyncLambdaRole.Arn
+    serviceRoleArn: !GetAtt AppSyncServiceRole.Arn
+
+- type: AWS_LAMBDA
+  name: addHelloMutation
+  config:
+    functionName: addHelloMutationFn
+    serviceRoleArn: !GetAtt AppSyncServiceRole.Arn

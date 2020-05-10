@@ -2,7 +2,7 @@ Resources:
   CognitoIdentityPool:
     Type: AWS::Cognito::IdentityPool
     Properties:
-      IdentityPoolName: StarterAppsyncIdentityPool
+      IdentityPoolName: ${self:service.name}-identitypool
       AllowUnauthenticatedIdentities: false
       CognitoIdentityProviders:
         - ClientId: !Ref CognitoUserPoolClient
