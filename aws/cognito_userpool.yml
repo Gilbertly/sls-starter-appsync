@@ -15,13 +15,19 @@ Resources:
     Properties:
       ClientName: ${self:service.name}-userpool-client
       UserPoolId: !Ref CognitoUserPool
+      PreventUserExistenceErrors: ENABLED
       GenerateSecret: false
       ExplicitAuthFlows:
         - ADMIN_NO_SRP_AUTH
+      AnalyticsConfiguration:
+        ApplicationId: !Ref PinpointAppAnalytics
+        ExternalId: '123'
+        RoleArn: !GetAtt CognitoPinpointAnalyticsRole.Arn
+        UserDataShared: true
       CallbackURLs: # authenticated landing page
-        - https://app.gilbertly.xyz
+        - https://localhost:8000
       LogoutURLs: # un-authenticated landing page
-        - https://gilbertly.xyz
+        - https://localhost:8000
 
   CognitoUserGroupBasic:
     Type: AWS::Cognito::UserPoolGroup
