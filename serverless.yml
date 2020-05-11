@@ -73,17 +73,37 @@ package:
   excludeDevDependencies: true
 
 functions:
-  getHelloQueryFn:
-    name: getHelloQueryFn
-    handler: src/functions/getHelloQueryFn.handler
+  getItemQueryFn:
+    name: getItemQueryFn
+    handler: src/functions/getItemQueryFn.handler
     description: Sample appsync query.
+    environment:
+      TABLE_ITEMS: !Ref ItemsDynamodbTable
+    iamRoleStatements:
+      - Sid: GetItemFromTable
+        Effect: Allow
+        Action:
+          - dynamodb:GetItem
+          - dynamodb:Query
+        Resource: !GetAtt ItemsDynamodbTable.Arn
     layers:
       - !Ref DependenciesLambdaLayer
 
-  addHelloMutationFn:
-    name: addHelloMutationFn
-    handler: src/functions/addHelloMutationFn.handler
+  addItemMutationFn:
+    name: addItemMutationFn
+    handler: src/functions/addItemMutationFn.handler
     description: Sample appsync mutation.
+    environment:
+      TABLE_ITEMS: !Ref ItemsDynamodbTable
+    iamRoleStatements:
+      - Sid: SaveItemToTable
+        Effect: Allow
+        Action:
+          - dynamodb:GetItem
+          - dynamodb:PutItem
+          - dynamodb:Query
+          - dynamodb:UpdateItem
+        Resource: !GetAtt ItemsDynamodbTable.Arn
     layers:
       - !Ref DependenciesLambdaLayer
 
@@ -92,7 +112,8 @@ functions:
     handler: src/functions/postConfirmFn.handler
     description: Triggers after a user confirms their email.
     iamRoleStatements:
-      - Effect: Allow
+      - Sid: AddUserToCognitoGroup
+        Effect: Allow
         Action:
           - cognito-idp:AdminAddUserToGroup
           - cognito-idp:AdminRemoveUserFromGroup

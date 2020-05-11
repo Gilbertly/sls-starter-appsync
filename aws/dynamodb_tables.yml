@@ -3,11 +3,11 @@ Resources:
     Type: AWS::DynamoDB::Table
     UpdateReplacePolicy: Retain
     Properties:
-      TableName: ${self:provider.stage}-${self:service.name}-items
+      TableName: ${self:provider.stage}-${self:service.name}
       BillingMode: PAY_PER_REQUEST
       KeySchema:
-        - AttributeName: itemID
+        - AttributeName: itemId
           KeyType: HASH
       AttributeDefinitions:
-        - AttributeName: itemID
+        - AttributeName: itemId
           AttributeType: S
