@@ -21,12 +21,12 @@ Resources:
         - ADMIN_NO_SRP_AUTH
       AnalyticsConfiguration:
         ApplicationId: !Ref PinpointAppAnalytics
-        ExternalId: '123'
+        ExternalId: !GetAtt CognitoPinpointAnalyticsRole.RoleId
         RoleArn: !GetAtt CognitoPinpointAnalyticsRole.Arn
         UserDataShared: true
-      CallbackURLs: # authenticated landing page
+      CallbackURLs:
         - https://localhost:8000
-      LogoutURLs: # un-authenticated landing page
+      LogoutURLs:
         - https://localhost:8000
 
   CognitoUserGroupBasic:
