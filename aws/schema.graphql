@@ -1,13 +1,15 @@
-type Hello {
-  name: String!
+type Item {
+  itemId: String
+  itemName: String
 }
 
 type Query {
-  getHello: Hello
+  getItem(itemId: String!): Item @aws_auth(cognito_groups: ["BASIC"])
 }
 
 type Mutation {
-  addHello(name: String): String
+  addItem(itemId: String!, itemName: String!): Item
+    @aws_auth(cognito_groups: ["BASIC", "STARTER"])
 }
 
 schema {
