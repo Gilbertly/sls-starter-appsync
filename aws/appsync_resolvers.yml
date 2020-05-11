@@ -1,11 +1,11 @@
 - type: Query
-  field: getHello
-  dataSource: getHelloQuery
+  field: getItem
+  dataSource: getItemQuery
   request: ./req_invoke.vtl
   response: ./resp_success.vtl
 
 - type: Mutation
-  field: addHello
-  dataSource: addHelloMutation
+  field: addItem
+  dataSource: addItemMutation
   request: ./req_invoke.vtl
   response: ./resp_success.vtl
