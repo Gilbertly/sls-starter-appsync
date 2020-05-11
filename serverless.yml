@@ -80,7 +80,8 @@ functions:
     environment:
       TABLE_ITEMS: !Ref ItemsDynamodbTable
     iamRoleStatements:
-      - Effect: Allow
+      - Sid: GetItemFromTable
+        Effect: Allow
         Action:
           - dynamodb:GetItem
           - dynamodb:Query
@@ -95,7 +96,8 @@ functions:
     environment:
       TABLE_ITEMS: !Ref ItemsDynamodbTable
     iamRoleStatements:
-      - Effect: Allow
+      - Sid: SaveItemToTable
+        Effect: Allow
         Action:
           - dynamodb:GetItem
           - dynamodb:PutItem
@@ -110,7 +112,8 @@ functions:
     handler: src/functions/postConfirmFn.handler
     description: Triggers after a user confirms their email.
     iamRoleStatements:
-      - Effect: Allow
+      - Sid: AddUserToCognitoGroup
+        Effect: Allow
         Action:
           - cognito-idp:AdminAddUserToGroup
           - cognito-idp:AdminRemoveUserFromGroup
