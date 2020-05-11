@@ -3,7 +3,7 @@ import * as DynamoDB from 'aws-sdk/clients/dynamodb';
 interface AddItem {
   tableName: string;
   itemId: string;
-  item: string;
+  itemName: string;
 }
 
 interface GetItem {
@@ -15,15 +15,17 @@ export const getItem = async (
   documentClient: DynamoDB.DocumentClient,
   payload: GetItem,
 ) => {
-  return await documentClient
+  const data = await documentClient
     .query({
       TableName: payload.tableName,
-      KeyConditionExpression: 'itemID = :itemId',
+      KeyConditionExpression: 'itemId = :itemId',
       ExpressionAttributeValues: {
         ':itemId': payload.itemId,
       },
     })
     .promise();
+  if (data.Items) return data.Items[0];
+  return data.Items;
 };
 
 export const addItem = async (
@@ -34,8 +36,8 @@ export const addItem = async (
     .put({
       TableName: payload.tableName,
       Item: {
-        itemID: payload.itemId,
-        item: payload.item,
+        itemId: payload.itemId,
+        itemName: payload.itemName,
       },
     })
     .promise();
