@@ -7,6 +7,13 @@ Resources:
         - email
       AutoVerifiedAttributes:
         - email
+      Schema:
+        - AttributeDataType: String
+          Name: email
+          Required: true
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 6 #characters
       LambdaConfig:
         PostConfirmation: !GetAtt PostConfirmFnLambdaFunction.Arn
 
@@ -16,6 +23,7 @@ Resources:
       ClientName: ${self:service.name}-userpool-client
       UserPoolId: !Ref CognitoUserPool
       PreventUserExistenceErrors: ENABLED
+      RefreshTokenValidity: 30 #minutes
       GenerateSecret: false
       ExplicitAuthFlows:
         - ADMIN_NO_SRP_AUTH
