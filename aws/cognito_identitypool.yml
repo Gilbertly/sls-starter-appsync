@@ -6,7 +6,7 @@ Resources:
       AllowUnauthenticatedIdentities: false
       # SupportedLoginProviders:
       #   accounts.google.com: ${self:custom.ssmPath.google_oauth_url}
-      #   api.twitter.com: ${self:custom.ssmPath.twitter_oauth_url}
+      #   api.twitter.com: ${self:custom.ssmPath.twitter_app_id}
       CognitoIdentityProviders:
         - ClientId: !Ref CognitoUserPoolClient
           ProviderName: !GetAtt CognitoUserPool.ProviderName
@@ -17,6 +17,19 @@ Resources:
       IdentityPoolId: !Ref CognitoIdentityPool
       Roles:
         authenticated: !GetAtt CognitoAuthRole.Arn
+
+  CognitoIdentityPoolGoogle:
+    Type: AWS::Cognito::UserPoolIdentityProvider
+    Properties:
+      ProviderName: Google
+      ProviderType: Google
+      UserPoolId: !Ref CognitoUserPool
+      AttributeMapping:
+        email: emailAddress
+      ProviderDetails:
+        client_id: ${self:custom.ssmPath.google_client_id}
+        client_secret: ${self:custom.ssmPath.google_client_secret}
+        authorize_scopes: email openid profile
 
 Outputs:
   IdentityPoolId:

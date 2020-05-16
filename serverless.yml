@@ -31,6 +31,8 @@ custom:
     defaultInherit: true
   ssmPath:
     sentry_dsn: ${ssm:/starter_appsync/sentry_dsn, ''}
+    google_client_id: ${ssm:/starter_appsync/google_client_id, ''}
+    google_client_secret: ${ssm:/starter_appsync/google_client_secret, ''}
 
 provider:
   name: aws

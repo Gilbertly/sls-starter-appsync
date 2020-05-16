@@ -29,7 +29,8 @@ Resources:
       ClientName: ${self:service.name}-userpool-client
       UserPoolId: !Ref CognitoUserPool
       PreventUserExistenceErrors: ENABLED
-      RefreshTokenValidity: 30 #days
+      AllowedOAuthFlowsUserPoolClient: true
+      RefreshTokenValidity: 14 #days
       GenerateSecret: false
       ExplicitAuthFlows:
         - ADMIN_NO_SRP_AUTH
@@ -38,10 +39,22 @@ Resources:
         ExternalId: !GetAtt CognitoPinpointAnalyticsRole.RoleId
         RoleArn: !GetAtt CognitoPinpointAnalyticsRole.Arn
         UserDataShared: true
+      SupportedIdentityProviders:
+        - COGNITO
+        - Google
+      AllowedOAuthScopes:
+        - email
+        - openid
+        - profile
+        - aws.cognito.signin.user.admin
+      AllowedOAuthFlows:
+        - implicit
       CallbackURLs:
-        - https://localhost:8000
+        - https://localhost:8000/
+        - https://app.gilbertly.xyz/
       LogoutURLs:
-        - https://localhost:8000
+        - https://localhost:8000/auth
+        - https://app.gilbertly.xyz/auth
 
   CognitoUserGroupBasic:
     Type: AWS::Cognito::UserPoolGroup
