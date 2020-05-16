@@ -4,6 +4,9 @@ Resources:
     Properties:
       IdentityPoolName: ${self:service.name}-identitypool
       AllowUnauthenticatedIdentities: false
+      # SupportedLoginProviders:
+      #   accounts.google.com: ${self:custom.ssmPath.google_oauth_url}
+      #   api.twitter.com: ${self:custom.ssmPath.twitter_oauth_url}
       CognitoIdentityProviders:
         - ClientId: !Ref CognitoUserPoolClient
           ProviderName: !GetAtt CognitoUserPool.ProviderName
@@ -14,7 +17,6 @@ Resources:
       IdentityPoolId: !Ref CognitoIdentityPool
       Roles:
         authenticated: !GetAtt CognitoAuthRole.Arn
-        unauthenticated: !GetAtt CognitoUnauthRole.Arn
 
 Outputs:
   IdentityPoolId:
