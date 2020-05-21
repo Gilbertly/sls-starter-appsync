@@ -10,10 +10,12 @@ Resources:
       Schema:
         - AttributeDataType: String
           Name: email
+          Mutable: true
           Required: true
-      Policies:
-        PasswordPolicy:
-          MinimumLength: 6 #characters
+        - AttributeDataType: String
+          Name: userId
+          Mutable: true
+          Required: false
       LambdaConfig:
         PostConfirmation: !GetAtt PostConfirmFnLambdaFunction.Arn
 
@@ -25,6 +27,7 @@ Resources:
 
   CognitoUserPoolClient:
     Type: AWS::Cognito::UserPoolClient
+    DependsOn: CognitoIdentityPoolGoogle
     Properties:
       ClientName: ${self:service.name}-userpool-client
       UserPoolId: !Ref CognitoUserPool
@@ -48,13 +51,12 @@ Resources:
         - profile
         - aws.cognito.signin.user.admin
       AllowedOAuthFlows:
+        - code
         - implicit
       CallbackURLs:
-        - https://localhost:8000/
-        - https://app.gilbertly.xyz/
+        - http://localhost:8000/items
       LogoutURLs:
-        - https://localhost:8000/auth
-        - https://app.gilbertly.xyz/auth
+        - http://localhost:8000/auth
 
   CognitoUserGroupBasic:
     Type: AWS::Cognito::UserPoolGroup
