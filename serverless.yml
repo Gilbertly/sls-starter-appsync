@@ -46,6 +46,12 @@ provider:
   profile: deployuser-${self:provider.stage}
   tags:
     project: ${self:provider.stage}-${self:service.name}
+  iamRoleStatements:
+    - Sid: AllowCreateLogGroup
+      Effect: Allow
+      Action: logs:CreateLogGroup
+      Resource:
+        - 'arn:aws:logs:#{AWS::Region}:#{AWS::AccountId}:log-group:/aws/lambda/*:*:*'
   deploymentBucket:
     blockPublicAccess: true
     serverSideEncryption: AES256
@@ -118,7 +124,7 @@ functions:
         Effect: Allow
         Action:
           - cognito-idp:AdminAddUserToGroup
-          - cognito-idp:AdminRemoveUserFromGroup
+          - cognito-idp:AdminUpdateUserAttributes
         Resource: '*'
     layers:
       - !Ref DependenciesLambdaLayer
