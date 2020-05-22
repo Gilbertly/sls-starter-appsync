@@ -3,13 +3,14 @@ type Item {
   itemName: String
 }
 
+# prettier-ignore
 type Query {
   getItem(itemId: String!): Item @aws_auth(cognito_groups: ["BASIC"])
 }
 
+# prettier-ignore
 type Mutation {
-  addItem(itemId: String!, itemName: String!): Item
-    @aws_auth(cognito_groups: ["BASIC", "STARTER"])
+  addItem(itemId: String!, itemName: String!): Item @aws_auth(cognito_groups: ["BASIC"])
 }
 
 schema {
