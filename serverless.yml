@@ -67,6 +67,7 @@ layers:
     compatibleRuntimes:
       - nodejs12.x
     licenseInfo: MIT
+    retain: false
 
 package:
   exclude:
