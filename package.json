@@ -9,7 +9,7 @@
     "lint:fix": "eslint './**/*.{ts,tsx}' --fix",
     "lint:test": "npm run lint:fix && jest",
     "layer:prepare": "rimraf -f ./nodejs dependencies.zip && npm run layer:install && npm run layer:zip",
-    "layer:install": "mkdir -p ./nodejs && cp package.json ./nodejs && cd ./nodejs && npm i --only=prod",
+    "layer:install": "mkdir -p ./nodejs && cp package.json ./nodejs && cd ./nodejs && npm i @sentry/node",
     "layer:zip": "zip -qr dependencies.zip nodejs && rimraf -f ./nodejs",
     "clean:build": "rimraf -f build && npm run build && npm run layer:prepare",
     "validate:sls": "sls deploy --stage dev --noDeploy",
