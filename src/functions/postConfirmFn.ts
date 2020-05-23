@@ -2,6 +2,7 @@ import * as CognitoISP from 'aws-sdk/clients/cognitoidentityserviceprovider';
 import * as Sentry from '@sentry/node';
 import * as crypto from 'crypto';
 import { Context, CognitoUserPoolTriggerEvent } from 'aws-lambda';
+import { captureException } from '../utils/sentryLogs';
 
 const cognitoClient = new CognitoISP();
 Sentry.init({ dsn: process.env.SENTRY_DSN });
@@ -23,6 +24,7 @@ exports.handler = async (
         Username: event.userName || '',
       })
       .promise();
+    console.log('Added user to default group BASIC.');
 
     await cognitoClient
       .adminUpdateUserAttributes({
@@ -31,12 +33,9 @@ exports.handler = async (
         UserAttributes: [{ Name: 'custom:userId', Value: userId }],
       })
       .promise();
-
-    console.log(
-      `Added user to group 'BASIC' and updated attribute 'custom:userId'.`,
-    );
+    console.log('Updated userId custom attribute.');
   } catch (error) {
-    Sentry.captureException(error);
+    captureException(context, error);
   }
   return event;
 };
