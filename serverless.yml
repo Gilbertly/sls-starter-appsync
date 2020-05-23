@@ -98,6 +98,25 @@ functions:
     layers:
       - !Ref DependenciesLambdaLayer
 
+  getItemsQueryFn:
+    name: getItemsQueryFn
+    handler: src/functions/getItemsQueryFn.handler
+    description: Get user items.
+    environment:
+      TABLE_ITEMS: !Ref ItemsDynamodbTable
+      INDEX_NAME: items-index
+    iamRoleStatements:
+      - Sid: GetItemsFromTable
+        Effect: Allow
+        Action:
+          - dynamodb:GetItem
+          - dynamodb:Query
+        Resource:
+          - !GetAtt ItemsDynamodbTable.Arn
+          - !Join ['/', [!GetAtt ItemsDynamodbTable.Arn, 'index/items-index']]
+    layers:
+      - !Ref DependenciesLambdaLayer
+
   addItemMutationFn:
     name: addItemMutationFn
     handler: src/functions/addItemMutationFn.handler
