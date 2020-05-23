@@ -4,6 +4,12 @@
   request: ./req_invoke.vtl
   response: ./resp_success.vtl
 
+- type: Query
+  field: getItems
+  dataSource: getItemsQuery
+  request: ./req_invoke.vtl
+  response: ./resp_success.vtl
+
 - type: Mutation
   field: addItem
   dataSource: addItemMutation
