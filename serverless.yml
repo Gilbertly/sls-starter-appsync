@@ -42,6 +42,7 @@ provider:
   stage: ${opt:region, 'dev'}
   region: ${opt:region, 'us-east-1'}
   logRetentionInDays: 7
+  versionFunctions: false
   stackName: ${self:provider.stage}-${self:service.name}
   profile: deployuser-${self:provider.stage}
   tags:
