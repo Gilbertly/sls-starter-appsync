@@ -23,7 +23,6 @@ exports.handler = async (event: AppSyncLambdaEvent, context: Context) => {
     console.log(`Successfully added itemId: ${event.arguments.itemId}`);
   } catch (error) {
     captureException(context, error);
-    console.error('Error adding item:', JSON.stringify(error));
   }
   return {
     itemId: context.awsRequestId,
