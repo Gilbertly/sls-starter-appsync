@@ -1,6 +1,7 @@
 Resources:
   CognitoUserPool:
     Type: AWS::Cognito::UserPool
+    DependsOn: PostConfirmFnLambdaFunction
     Properties:
       UserPoolName: ${self:service.name}-userpool
       UsernameAttributes:
@@ -10,7 +11,7 @@ Resources:
       Schema:
         - AttributeDataType: String
           Name: email
-          Mutable: true
+          Mutable: false
           Required: true
         - AttributeDataType: String
           Name: userId

@@ -55,6 +55,7 @@ Resources:
 
   CognitoPinpointAnalyticsRole:
     Type: AWS::IAM::Role
+    DependsOn: PinpointAppAnalytics
     Properties:
       Path: /
       RoleName: ${self:service.name}-pinpoint-cognito-role
@@ -77,6 +78,7 @@ Resources:
 
   CognitoPostConfirmTriggerPermission:
     Type: AWS::Lambda::Permission
+    DependsOn: CognitoUserPool
     Properties:
       Action: lambda:InvokeFunction
       FunctionName: !GetAtt PostConfirmFnLambdaFunction.Arn
