@@ -4,6 +4,7 @@ service:
 plugins:
   - serverless-webpack
   - serverless-appsync-plugin
+  - serverless-prune-plugin
   - serverless-iam-roles-per-function
   - serverless-pseudo-parameters
 
@@ -29,6 +30,10 @@ custom:
       - ${file(./aws/appsync_resolvers.yml)}
   serverless-iam-roles-per-function:
     defaultInherit: true
+  prune:
+    automatic: true
+    includeLayers: true
+    number: 5
   ssmPath:
     sentry_dsn: ${ssm:/starter_appsync/sentry_dsn, ''}
     google_client_id: ${ssm:/starter_appsync/google_client_id, ''}
@@ -42,7 +47,6 @@ provider:
   stage: ${opt:region, 'dev'}
   region: ${opt:region, 'us-east-1'}
   logRetentionInDays: 7
-  versionFunctions: false
   stackName: ${self:provider.stage}-${self:service.name}
   profile: deployuser-${self:provider.stage}
   tags:
