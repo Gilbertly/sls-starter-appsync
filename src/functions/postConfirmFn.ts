@@ -10,7 +10,7 @@ Sentry.init({ dsn: process.env.SENTRY_DSN });
 exports.handler = async (
   event: CognitoUserPoolTriggerEvent,
   context: Context,
-): Promise<{}> => {
+): Promise<CognitoUserPoolTriggerEvent> => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
