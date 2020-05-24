@@ -11,7 +11,7 @@ Resources:
       Schema:
         - AttributeDataType: String
           Name: email
-          Mutable: false
+          Mutable: true
           Required: true
         - AttributeDataType: String
           Name: userId
