@@ -99,7 +99,7 @@ workflows:
     jobs:
       - build
       - deploy_dev:
-          context: pwa-starter-core-dev
+          context: sls-starter-appsync-dev
           filters:
             branches:
               only:
@@ -107,7 +107,7 @@ workflows:
           requires:
             - build
       - deploy_prod:
-          context: pwa-starter-core-prod
+          context: sls-starter-appsync-prod
           filters:
             branches:
               only:
