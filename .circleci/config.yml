@@ -84,8 +84,7 @@ jobs:
             ./node_modules/.bin/sls config credentials \
             --provider aws \
             --key ${ACCESS_KEY} \
-            --secret ${SECRET_KEY} \
-            --profile deployuser-dev
+            --secret ${SECRET_KEY}
       - run:
           name: Deploy Dev
           command: npm run deploy:dev
@@ -103,8 +102,7 @@ jobs:
             ./node_modules/.bin/sls config credentials \
             --provider aws \
             --key ${ACCESS_KEY} \
-            --secret ${SECRET_KEY} \
-            --profile deployuser-prod
+            --secret ${SECRET_KEY}
       - run:
           name: Deploy Prod
           command: npm run deploy:prod

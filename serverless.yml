@@ -48,7 +48,6 @@ provider:
   region: ${opt:region, 'us-east-1'}
   logRetentionInDays: 7
   stackName: ${self:provider.stage}-${self:service.name}
-  # profile: deployuser-${self:provider.stage}
   tags:
     project: ${self:provider.stage}-${self:service.name}
   iamRoleStatements:
