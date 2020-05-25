@@ -37,7 +37,12 @@ refs:
     - &sls_configure
       run:
         name: Configure Serverless AWS Credentials
-        command: ./node_modules/.bin/sls config credentials --provider aws --key ${ACCESS_KEY} --secret ${SECRET_KEY}
+        command: |
+          ./node_modules/.bin/sls config credentials \
+          --provider aws \
+          --key ${ACCESS_KEY} \
+          --secret ${SECRET_KEY} \
+          --profile ${DEPLOY_USER}
     - &sentry_release
       run:
         name: Sentry Release
