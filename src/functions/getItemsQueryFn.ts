@@ -14,7 +14,6 @@ exports.handler = async (event: AppSyncLambdaEvent, context: Context) => {
   let response;
 
   try {
-    console.log(`Processing getItems ...`);
     response = await getItems(documentClient, {
       userId: event.identity.claims['custom:userId'],
       tableName: process.env.TABLE_ITEMS || '',
@@ -23,7 +22,6 @@ exports.handler = async (event: AppSyncLambdaEvent, context: Context) => {
     console.log(`Successfully queried items.`);
   } catch (error) {
     captureException(context, error);
-    console.error('Error getting items:', JSON.stringify(error));
   }
   return response;
 };

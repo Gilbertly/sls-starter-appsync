@@ -13,7 +13,6 @@ exports.handler = async (event: AppSyncLambdaEvent, context: Context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    console.log(`Processing addItem ...`);
     await addItem(documentClient, {
       userId: event.identity.claims['custom:userId'],
       tableName: process.env.TABLE_ITEMS || '',
