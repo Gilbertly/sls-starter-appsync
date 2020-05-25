@@ -34,6 +34,10 @@ refs:
       run:
         name: Run Tests, Audit Fix, & Build
         command: npm run validate:all
+    - &sls_configure
+      run:
+        name: Configure Serverless AWS Credentials
+        command: ./node_modules/.bin/sls config credentials --provider aws --key ${ACCESS_KEY} --secret ${SECRET_KEY}
     - &sentry_release
       run:
         name: Sentry Release
@@ -75,6 +79,7 @@ jobs:
     <<: *container_config
     steps:
       - *attach_workspace
+      - *sls_configure
       - run:
           name: Integration test:Dev
           command: npm run newman:dev
@@ -86,6 +91,7 @@ jobs:
     <<: *container_config
     steps:
       - *attach_workspace
+      - *sls_configure
       - run:
           name: Integration test:Prod
           command: npm run newman:prod
