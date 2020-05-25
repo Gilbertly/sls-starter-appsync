@@ -114,13 +114,3 @@ workflows:
                 - master
           requires:
             - build
-  nightly_build:
-    triggers:
-      - schedule:
-          cron: '0 0 * * *'
-          filters:
-            branches:
-              only:
-                - master
-    jobs:
-      - *firefox_build_nightly
