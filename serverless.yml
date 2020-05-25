@@ -90,7 +90,7 @@ functions:
   getItemQueryFn:
     name: getItemQueryFn
     handler: src/functions/getItemQueryFn.handler
-    description: Sample appsync query.
+    description: Sample appsync get item query.
     environment:
       TABLE_ITEMS: !Ref ItemsDynamodbTable
     iamRoleStatements:
@@ -98,7 +98,6 @@ functions:
         Effect: Allow
         Action:
           - dynamodb:GetItem
-          - dynamodb:Query
         Resource: !GetAtt ItemsDynamodbTable.Arn
     layers:
       - !Ref DependenciesLambdaLayer
@@ -106,7 +105,7 @@ functions:
   getItemsQueryFn:
     name: getItemsQueryFn
     handler: src/functions/getItemsQueryFn.handler
-    description: Get user items.
+    description: Sample appsync get items query.
     environment:
       TABLE_ITEMS: !Ref ItemsDynamodbTable
       INDEX_NAME: items-index
@@ -114,7 +113,6 @@ functions:
       - Sid: GetItemsFromTable
         Effect: Allow
         Action:
-          - dynamodb:GetItem
           - dynamodb:Query
         Resource:
           - !GetAtt ItemsDynamodbTable.Arn
@@ -125,17 +123,44 @@ functions:
   addItemMutationFn:
     name: addItemMutationFn
     handler: src/functions/addItemMutationFn.handler
-    description: Sample appsync mutation.
+    description: Sample appsync add mutation.
     environment:
       TABLE_ITEMS: !Ref ItemsDynamodbTable
     iamRoleStatements:
       - Sid: SaveItemToTable
         Effect: Allow
         Action:
-          - dynamodb:GetItem
           - dynamodb:PutItem
-          - dynamodb:Query
+        Resource: !GetAtt ItemsDynamodbTable.Arn
+    layers:
+      - !Ref DependenciesLambdaLayer
+
+  updateItemMutationFn:
+    name: updateItemMutationFn
+    handler: src/functions/updateItemMutationFn.handler
+    description: Sample appsync update mutation.
+    environment:
+      TABLE_ITEMS: !Ref ItemsDynamodbTable
+    iamRoleStatements:
+      - Sid: SaveItemToTable
+        Effect: Allow
+        Action:
           - dynamodb:UpdateItem
+        Resource: !GetAtt ItemsDynamodbTable.Arn
+    layers:
+      - !Ref DependenciesLambdaLayer
+
+  deleteItemMutationFn:
+    name: deleteItemMutationFn
+    handler: src/functions/deleteItemMutationFn.handler
+    description: Sample appsync delete mutation.
+    environment:
+      TABLE_ITEMS: !Ref ItemsDynamodbTable
+    iamRoleStatements:
+      - Sid: RemoveItemFromTable
+        Effect: Allow
+        Action:
+          - dynamodb:DeleteItem
         Resource: !GetAtt ItemsDynamodbTable.Arn
     layers:
       - !Ref DependenciesLambdaLayer
@@ -150,7 +175,7 @@ functions:
         Action:
           - cognito-idp:AdminAddUserToGroup
           - cognito-idp:AdminUpdateUserAttributes
-        Resource: '*'
+        Resource: '*' # todo: resolve circular dependency better.
     layers:
       - !Ref DependenciesLambdaLayer
 
