@@ -1,5 +1,5 @@
 type Item {
-  itemId: String
+  itemId: String!
   itemName: String
 }
 
@@ -12,6 +12,8 @@ type Query {
 # prettier-ignore
 type Mutation {
   addItem(itemName: String!): Item @aws_auth(cognito_groups: ["BASIC"])
+  updateItem(itemId: String!, itemName: String!): Item @aws_auth(cognito_groups: ["BASIC"])
+  deleteItem(itemId: String!): Item @aws_auth(cognito_groups: ["BASIC"])
 }
 
 schema {
