@@ -52,22 +52,58 @@ export const addItem = async (
     itemName: string;
   },
 ) => {
-  let response;
-  try {
-    console.log('add item payload:', JSON.stringify(payload));
-    response = await documentClient
-      .put({
-        TableName: payload.tableName,
-        Item: {
-          userId: payload.userId,
-          itemId: payload.itemId,
-          itemName: payload.itemName,
-        },
-      })
-      .promise()
-      .then(res => res);
-  } catch (error) {
-    console.error('error adding item:', JSON.stringify(error));
-  }
-  return response;
+  return await documentClient
+    .put({
+      TableName: payload.tableName,
+      Item: {
+        userId: payload.userId,
+        itemId: payload.itemId,
+        itemName: payload.itemName,
+      },
+    })
+    .promise();
+};
+
+export const updateItem = async (
+  documentClient: DynamoDB.DocumentClient,
+  payload: {
+    userId: string;
+    tableName: string;
+    itemId: string;
+    itemName: string;
+  },
+) => {
+  return await documentClient
+    .update({
+      TableName: payload.tableName,
+      Key: {
+        userId: payload.userId,
+        itemId: payload.itemId,
+      },
+      UpdateExpression: 'set itemName = :itemName',
+      ExpressionAttributeValues: {
+        ':itemName': payload.itemName,
+      },
+      ReturnValues: 'UPDATED_NEW',
+    })
+    .promise();
+};
+
+export const deleteItem = async (
+  documentClient: DynamoDB.DocumentClient,
+  payload: {
+    userId: string;
+    tableName: string;
+    itemId: string;
+  },
+) => {
+  return await documentClient
+    .delete({
+      TableName: payload.tableName,
+      Key: {
+        userId: payload.userId,
+        itemId: payload.itemId,
+      },
+    })
+    .promise();
 };
