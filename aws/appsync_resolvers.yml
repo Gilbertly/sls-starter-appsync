@@ -15,3 +15,15 @@
   dataSource: addItemMutation
   request: ./req_invoke.vtl
   response: ./resp_success.vtl
+
+- type: Mutation
+  field: updateItem
+  dataSource: updateItemMutation
+  request: ./req_invoke.vtl
+  response: ./resp_success.vtl
+
+- type: Mutation
+  field: deleteItem
+  dataSource: deleteItemMutation
+  request: ./req_invoke.vtl
+  response: ./resp_success.vtl

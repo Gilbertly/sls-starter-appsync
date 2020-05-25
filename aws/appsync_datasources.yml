@@ -15,3 +15,15 @@
   config:
     functionName: addItemMutationFn
     serviceRoleArn: !GetAtt AppSyncServiceRole.Arn
+
+- type: AWS_LAMBDA
+  name: updateItemMutation
+  config:
+    functionName: updateItemMutationFn
+    serviceRoleArn: !GetAtt AppSyncServiceRole.Arn
+
+- type: AWS_LAMBDA
+  name: deleteItemMutation
+  config:
+    functionName: deleteItemMutationFn
+    serviceRoleArn: !GetAtt AppSyncServiceRole.Arn
