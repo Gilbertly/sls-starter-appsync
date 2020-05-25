@@ -65,6 +65,7 @@ typings/
 env.yml
 data/**
 **/*.zip
+nodejs/**
 build/**
 .serverless/**
 **/ssm.*.json

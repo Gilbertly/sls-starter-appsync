@@ -3,7 +3,7 @@ import * as Sentry from '@sentry/node';
 import { Context } from 'aws-lambda';
 import { AppSyncLambdaEvent } from '../utils/appsyncLambda';
 import { captureException } from '../utils/sentryLogs';
-import { getItem } from '../models/tableItems';
+import { getItems } from '../models/tableItems';
 
 Sentry.init({ dsn: process.env.SENTRY_DSN });
 let documentClient: DynamoDB.DocumentClient;
@@ -14,12 +14,12 @@ exports.handler = async (event: AppSyncLambdaEvent, context: Context) => {
   let response;
 
   try {
-    response = await getItem(documentClient, {
+    response = await getItems(documentClient, {
       userId: event.identity.claims['custom:userId'],
       tableName: process.env.TABLE_ITEMS || '',
-      itemId: event.arguments.itemId || '',
+      indexName: process.env.INDEX_NAME || '',
     });
-    console.log(`Successfully queried itemId: ${event.arguments.itemId}`);
+    console.log(`Successfully queried items.`);
   } catch (error) {
     captureException(context, error);
   }

@@ -14,7 +14,19 @@ Resources:
       IdentityPoolId: !Ref CognitoIdentityPool
       Roles:
         authenticated: !GetAtt CognitoAuthRole.Arn
-        unauthenticated: !GetAtt CognitoUnauthRole.Arn
+
+  CognitoIdentityPoolGoogle:
+    Type: AWS::Cognito::UserPoolIdentityProvider
+    Properties:
+      ProviderName: Google
+      ProviderType: Google
+      UserPoolId: !Ref CognitoUserPool
+      AttributeMapping:
+        email: email
+      ProviderDetails:
+        client_id: ${self:custom.ssmPath.google_client_id}
+        client_secret: ${self:custom.ssmPath.google_client_secret}
+        authorize_scopes: email openid profile
 
 Outputs:
   IdentityPoolId:

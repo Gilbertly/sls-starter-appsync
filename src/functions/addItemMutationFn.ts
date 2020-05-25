@@ -2,24 +2,29 @@ import * as DynamoDB from 'aws-sdk/clients/dynamodb';
 import * as Sentry from '@sentry/node';
 import { Context } from 'aws-lambda';
 import { AppSyncLambdaEvent } from '../utils/appsyncLambda';
+import { captureException } from '../utils/sentryLogs';
 import { addItem } from '../models/tableItems';
 
 Sentry.init({ dsn: process.env.SENTRY_DSN });
-const documentClient = new DynamoDB.DocumentClient();
+let documentClient: DynamoDB.DocumentClient;
 
 exports.handler = async (event: AppSyncLambdaEvent, context: Context) => {
+  if (!documentClient) documentClient = new DynamoDB.DocumentClient();
   context.callbackWaitsForEmptyEventLoop = false;
 
   try {
-    console.log(`Processing event ...`);
     await addItem(documentClient, {
+      userId: event.identity.claims['custom:userId'],
       tableName: process.env.TABLE_ITEMS || '',
-      itemId: event.arguments.itemId || '',
+      itemId: context.awsRequestId,
       itemName: event.arguments.itemName || '',
     });
+    console.log(`Successfully added itemId: ${event.arguments.itemId}`);
   } catch (error) {
-    Sentry.captureException(error);
+    captureException(context, error);
   }
-
-  return event.arguments;
+  return {
+    itemId: context.awsRequestId,
+    itemName: event.arguments.itemName,
+  };
 };

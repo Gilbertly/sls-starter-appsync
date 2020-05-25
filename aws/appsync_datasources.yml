@@ -5,7 +5,25 @@
     serviceRoleArn: !GetAtt AppSyncServiceRole.Arn
 
 - type: AWS_LAMBDA
+  name: getItemsQuery
+  config:
+    functionName: getItemsQueryFn
+    serviceRoleArn: !GetAtt AppSyncServiceRole.Arn
+
+- type: AWS_LAMBDA
   name: addItemMutation
   config:
     functionName: addItemMutationFn
+    serviceRoleArn: !GetAtt AppSyncServiceRole.Arn
+
+- type: AWS_LAMBDA
+  name: updateItemMutation
+  config:
+    functionName: updateItemMutationFn
+    serviceRoleArn: !GetAtt AppSyncServiceRole.Arn
+
+- type: AWS_LAMBDA
+  name: deleteItemMutation
+  config:
+    functionName: deleteItemMutationFn
     serviceRoleArn: !GetAtt AppSyncServiceRole.Arn

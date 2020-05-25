@@ -1,15 +1,19 @@
 type Item {
-  itemId: String
+  itemId: String!
   itemName: String
 }
 
+# prettier-ignore
 type Query {
   getItem(itemId: String!): Item @aws_auth(cognito_groups: ["BASIC"])
+  getItems: [Item] @aws_auth(cognito_groups: ["BASIC"])
 }
 
+# prettier-ignore
 type Mutation {
-  addItem(itemId: String!, itemName: String!): Item
-    @aws_auth(cognito_groups: ["BASIC", "STARTER"])
+  addItem(itemName: String!): Item @aws_auth(cognito_groups: ["BASIC"])
+  updateItem(itemId: String!, itemName: String!): Item @aws_auth(cognito_groups: ["BASIC"])
+  deleteItem(itemId: String!): Item @aws_auth(cognito_groups: ["BASIC"])
 }
 
 schema {

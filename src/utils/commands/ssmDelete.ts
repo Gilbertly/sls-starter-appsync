@@ -30,7 +30,7 @@ export const build = (): yargs.CommandModule => {
 
   const deleteParameters = async (params: SSM.DeleteParameterRequest[]) => {
     await Promise.all(
-      params.map(async (param) => {
+      params.map(async param => {
         try {
           await ssm
             .deleteParameter({
