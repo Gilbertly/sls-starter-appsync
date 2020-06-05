@@ -58,8 +58,10 @@ Resources:
         - implicit
       CallbackURLs:
         - http://localhost:8000/items
+        - https://dev.gilbertly.com/items
       LogoutURLs:
         - http://localhost:8000/auth
+        - https://dev.gilbertly.com/auth
 
   CognitoUserGroupBasic:
     Type: AWS::Cognito::UserPoolGroup
