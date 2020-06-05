@@ -23,6 +23,8 @@ Resources:
       UserPoolId: !Ref CognitoUserPool
       AttributeMapping:
         email: email
+        name: name
+        picture: picture
       ProviderDetails:
         client_id: ${self:custom.ssmPath.google_client_id}
         client_secret: ${self:custom.ssmPath.google_client_secret}
