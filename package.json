@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@sentry/node": "^5.28.0",
-    "aws-sdk": "^2.792.0"
+    "aws-sdk": "^2.804.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
