@@ -1,29 +1,27 @@
 - type: Query
   field: getItem
   dataSource: getItemQuery
-  request: ./req_invoke.vtl
-  response: ./resp_success.vtl
+  request: ./queryGetItemRequest.vtl
+  response: ./queryGetItemResponse.vtl
 
 - type: Query
   field: getItems
   dataSource: getItemsQuery
-  request: ./req_invoke.vtl
-  response: ./resp_success.vtl
+  request: ./queryGetItemsRequest.vtl
+  response: ./queryGetItemsResponse.vtl
 
 - type: Mutation
   field: addItem
   dataSource: addItemMutation
-  request: ./req_invoke.vtl
-  response: ./resp_success.vtl
+  request: ./mutationAddItemRequest.vtl
+  response: ./mutationAddItemResponse.vtl
 
 - type: Mutation
   field: updateItem
   dataSource: updateItemMutation
-  request: ./req_invoke.vtl
-  response: ./resp_success.vtl
+  request: ./mutationUpdateItemRequest.vtl
 
 - type: Mutation
   field: deleteItem
   dataSource: deleteItemMutation
-  request: ./req_invoke.vtl
-  response: ./resp_success.vtl
+  request: ./mutationDeleteItemRequest.vtl
