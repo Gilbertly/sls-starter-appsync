@@ -1,0 +1,11 @@
+{
+  "version" : "2018-05-29",
+  "operation" : "DeleteItem",
+  "key": {
+    "itemId" : $util.dynamodb.toDynamoDBJson($context.arguments.itemId),
+    "userId" : $util.dynamodb.toDynamoDBJson($context.identity.claims['custom:userId'])
+  },
+  "condition" : {
+    "expression" : "attribute_exists(itemId)"
+  }
+}

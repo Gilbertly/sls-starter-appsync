@@ -1,0 +1,14 @@
+{
+  "version" : "2018-05-29",
+  "operation" : "PutItem",
+  "key": {
+    "itemId" : $util.dynamodb.toDynamoDBJson($context.awsRequestId),
+    "userId" : $util.dynamodb.toDynamoDBJson($context.identity.claims['custom:userId'])
+  },
+  "attribute_values": {
+    "itemName": $util.dynamodb.toDynamoDBJson($context.arguments.itemName)
+  },
+  "condition" : {
+    "expression" : "attribute_exists(itemId)"
+  }
+}

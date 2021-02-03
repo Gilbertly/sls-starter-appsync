@@ -1,0 +1,17 @@
+{
+  "version" : "2018-05-29",
+  "operation" : "UpdateItem",
+  "key": {
+    "itemId" : $util.dynamodb.toDynamoDBJson($context.arguments.itemId),
+    "userId" : $util.dynamodb.toDynamoDBJson($context.identity.claims['custom:userId'])
+  },
+  "update": {
+    "expression": "set itemName = :itemName",
+    "expressionValues": {
+      ":itemName": $util.dynamodb.toDynamoDBJson($context.arguments.itemName)
+    }
+  },
+  "condition" : {
+    "expression" : "attribute_exists(itemId)"
+  }
+}
