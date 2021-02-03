@@ -16,13 +16,8 @@
     "validate:all": "npm run lint:test && npm run clean:build",
     "deploy:dev": "npm run validate:all && sls deploy --stage dev",
     "deploy:prod": "npm run validate:all && sls deploy --stage prod",
-    "newman:dev": "ts-node ./src/utils/cli.ts newman dev",
-    "newman:prod": "ts-node ./src/utils/cli.ts newman prod",
     "ddb:install": "sls dynamodb install",
-    "ddb:start": "sls dynamodb start --migrate",
-    "ssm:download": "ts-node ./src/utils/cli.ts ssmDownload",
-    "ssm:update": "ts-node ./src/utils/cli.ts ssmUpdate",
-    "ssm:delete": "ts-node ./src/utils/cli.ts ssmDelete"
+    "ddb:start": "sls dynamodb start --migrate"
   },
   "repository": {
     "type": "git",
@@ -38,7 +33,7 @@
   },
   "dependencies": {
     "@sentry/node": "^6.0.4",
-    "aws-sdk": "^2.835.0"
+    "aws-sdk": "^2.836.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
@@ -48,8 +43,6 @@
     "@types/aws-lambda": "^8.10.71",
     "@types/jest": "^26.0.20",
     "@types/newman": "^5.1.1",
-    "@types/ora": "^3.2.0",
-    "@types/yargs": "^16.0.0",
     "@typescript-eslint/eslint-plugin": "^4.14.2",
     "@typescript-eslint/parser": "^4.14.2",
     "amplify-appsync-simulator": "^1.25.0",
@@ -74,8 +67,7 @@
     "ts-loader": "^8.0.14",
     "ts-node": "^9.1.1",
     "typescript": "^4.1.3",
-    "webpack": "^5.20.0",
-    "webpack-node-externals": "^2.5.2",
-    "yargs": "^16.2.0"
+    "webpack": "^5.20.1",
+    "webpack-node-externals": "^2.5.2"
   }
 }
