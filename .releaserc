@@ -1,0 +1,39 @@
+{
+  "branch": "master",
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer", {
+        "releaseRules": [
+          { "type": "docs", "release": "patch" },
+          { "type": "chore", "release": "patch" },
+          { "type": "refactor", "release": "minor" },
+          { "type": "fix", "release": "minor" },
+          { "type": "feat", "release": "major" }
+        ]
+      }
+    ],
+    "@semantic-release/release-notes-generator",
+    [
+      "@semantic-release/changelog", {
+        "changelogFile": ".github/CHANGELOG.md",
+      }
+    ],
+    [
+      "@semantic-release/git",{
+        "assets": [".github/CHANGELOG.md", "package.json", "package-lock.json"]
+      }
+    ],
+    [
+      "@semantic-release/github", {
+        "assets": [
+          {
+            "name": "v${nextRelease.version}.zip",
+            "label": "v${nextRelease.version}.zip",
+            "path": "public.zip"
+          }
+        ]
+      }
+    ]
+  ],
+  "preset": "angular"
+}
