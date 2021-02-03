@@ -4,7 +4,7 @@ Resources:
     UpdateReplacePolicy: Retain
     # DeletionPolicy: Retain
     Properties:
-      TableName: ${self:provider.stage}-${self:service.name}
+      TableName: ${self:provider.stage}-${self:service}
       BillingMode: PAY_PER_REQUEST
       PointInTimeRecoverySpecification:
         PointInTimeRecoveryEnabled: True
