@@ -1,14 +1,22 @@
-service:
-  name: starter-appsync
+service: starter-appsync
+useDotenv: true
 
 plugins:
   - serverless-webpack
   - serverless-appsync-plugin
   - serverless-prune-plugin
   - serverless-iam-roles-per-function
-  - serverless-pseudo-parameters
 
 custom:
+  param:
+    dev:
+      sentryDSN: ${env:DEV_SENTRY_DSN}
+      googleClientID: ${env:DEV_GOOGLE_CLIENT_ID}
+      googleClientSecret: ${env:DEV_GOOGLE_CLIENT_SECRET}
+    prod:
+      sentryDSN: ${env:PROD_SENTRY_DSN}
+      googleClientID: ${env:PROD_GOOGLE_CLIENT_ID}
+      googleClientSecret: ${env:PROD_GOOGLE_CLIENT_SECRET}
   webpack:
     webpackConfig: ./config/webpack.config.js
     packagePath: ./package.json
@@ -16,28 +24,28 @@ custom:
     forceExclude:
       - aws-sdk
   appSync:
-    name: ${self:provider.stage}-${self:service.name}
+    name: ${self:provider.stage}-${self:service}
     authenticationType: AMAZON_COGNITO_USER_POOLS
     schema: ./aws/schema.graphql
+    # serviceRole: !Ref AppSyncServiceRole
     mappingTemplatesLocation: ./aws/templates
+    defaultMappingTemplates:
+      request: ./defaultRequest.vtl
+      response: ./defaultResponse.vtl
+    mappingTemplates:
+      - ${file(./aws/appsync_resolvers.yml)}
+    dataSources:
+      - ${file(./aws/appsync_datasources.yml)}
     userPoolConfig:
       awsRegion: ${self:provider.region}
       defaultAction: ALLOW
       userPoolId: !Ref CognitoUserPool
-    dataSources:
-      - ${file(./aws/appsync_datasources.yml)}
-    mappingTemplates:
-      - ${file(./aws/appsync_resolvers.yml)}
   serverless-iam-roles-per-function:
     defaultInherit: true
   prune:
     automatic: true
     includeLayers: true
     number: 5
-  ssmPath:
-    sentry_dsn: ${ssm:/starter_appsync/sentry_dsn, ''}
-    google_client_id: ${ssm:/starter_appsync/google_client_id, ''}
-    google_client_secret: ${ssm:/starter_appsync/google_client_secret, ''}
 
 provider:
   name: aws
@@ -47,24 +55,18 @@ provider:
   stage: ${opt:region, 'dev'}
   region: ${opt:region, 'us-east-1'}
   logRetentionInDays: 7
-  stackName: ${self:provider.stage}-${self:service.name}
+  stackName: ${self:provider.stage}-${self:service}
   tags:
-    project: ${self:provider.stage}-${self:service.name}
-  iamRoleStatements:
-    - Sid: AllowCreateLogGroup
-      Effect: Allow
-      Action: logs:CreateLogGroup
-      Resource:
-        - 'arn:aws:logs:#{AWS::Region}:#{AWS::AccountId}:log-group:/aws/lambda/*:*:*'
+    project: ${self:provider.stage}-${self:service}
   deploymentBucket:
     blockPublicAccess: true
     serverSideEncryption: AES256
   environment:
-    SENTRY_DSN: ${self:custom.ssmPath.sentry_dsn}
+    SENTRY_DSN: ${self:custom.param.${self.provider.stage}.sentryDSN}
 
 layers:
   dependencies:
-    name: ${self:provider.stage}-${self:service.name}
+    name: ${self:provider.stage}-${self:service}
     description: Appsync lambda dependencies.
     package:
       artifact: dependencies.zip
@@ -73,97 +75,7 @@ layers:
     licenseInfo: MIT
     retain: false
 
-package:
-  exclude:
-    - .git/**
-    - .serverless/**
-    - node_modules/**
-    - coverage/**
-    - src/__tests__/**
-    - aws/**
-  include:
-    - src/**
-  excludeDevDependencies: true
-
 functions:
-  getItemQueryFn:
-    name: getItemQueryFn
-    handler: src/functions/getItemQueryFn.handler
-    description: Sample appsync get item query.
-    environment:
-      TABLE_ITEMS: !Ref ItemsDynamodbTable
-    iamRoleStatements:
-      - Sid: GetItemFromTable
-        Effect: Allow
-        Action:
-          - dynamodb:GetItem
-        Resource: !GetAtt ItemsDynamodbTable.Arn
-    layers:
-      - !Ref DependenciesLambdaLayer
-
-  getItemsQueryFn:
-    name: getItemsQueryFn
-    handler: src/functions/getItemsQueryFn.handler
-    description: Sample appsync get items query.
-    environment:
-      TABLE_ITEMS: !Ref ItemsDynamodbTable
-      INDEX_NAME: items-index
-    iamRoleStatements:
-      - Sid: GetItemsFromTable
-        Effect: Allow
-        Action:
-          - dynamodb:Query
-        Resource:
-          - !GetAtt ItemsDynamodbTable.Arn
-          - !Join ['/', [!GetAtt ItemsDynamodbTable.Arn, 'index/items-index']]
-    layers:
-      - !Ref DependenciesLambdaLayer
-
-  addItemMutationFn:
-    name: addItemMutationFn
-    handler: src/functions/addItemMutationFn.handler
-    description: Sample appsync add mutation.
-    environment:
-      TABLE_ITEMS: !Ref ItemsDynamodbTable
-    iamRoleStatements:
-      - Sid: SaveItemToTable
-        Effect: Allow
-        Action:
-          - dynamodb:PutItem
-        Resource: !GetAtt ItemsDynamodbTable.Arn
-    layers:
-      - !Ref DependenciesLambdaLayer
-
-  updateItemMutationFn:
-    name: updateItemMutationFn
-    handler: src/functions/updateItemMutationFn.handler
-    description: Sample appsync update mutation.
-    environment:
-      TABLE_ITEMS: !Ref ItemsDynamodbTable
-    iamRoleStatements:
-      - Sid: SaveItemToTable
-        Effect: Allow
-        Action:
-          - dynamodb:UpdateItem
-        Resource: !GetAtt ItemsDynamodbTable.Arn
-    layers:
-      - !Ref DependenciesLambdaLayer
-
-  deleteItemMutationFn:
-    name: deleteItemMutationFn
-    handler: src/functions/deleteItemMutationFn.handler
-    description: Sample appsync delete mutation.
-    environment:
-      TABLE_ITEMS: !Ref ItemsDynamodbTable
-    iamRoleStatements:
-      - Sid: RemoveItemFromTable
-        Effect: Allow
-        Action:
-          - dynamodb:DeleteItem
-        Resource: !GetAtt ItemsDynamodbTable.Arn
-    layers:
-      - !Ref DependenciesLambdaLayer
-
   postConfirmFn:
     name: postConfirmFn
     handler: src/functions/postConfirmFn.handler
@@ -183,4 +95,3 @@ resources:
   - ${file(./aws/dynamodb_tables.yml)}
   - ${file(./aws/cognito_userpool.yml)}
   - ${file(./aws/cognito_identitypool.yml)}
-  - ${file(./aws/stream_analytics.yml)}
