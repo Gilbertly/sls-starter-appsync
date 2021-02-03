@@ -13,8 +13,4 @@ $ npm run cli:cmd ssm.update dev
 
 // deploy dev resources
 $ npm run deploy:dev
-
-// copy originid from appsync
-// remove starting 'https://' & the trailing '/graphql'
-// add the new originid in the domains repo
 ```
