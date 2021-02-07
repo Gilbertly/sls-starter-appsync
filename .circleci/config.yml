@@ -75,9 +75,9 @@ jobs:
     <<: *container_config
     steps:
       - *attach_workspace
-      - run:
-          name: Integration test:Dev
-          command: npm run newman:dev
+      # - run:
+      #     name: Integration test:Dev
+      #     command: npm run newman:dev
       - run:
           name: Configure Serverless AWS Dev Credentials
           command: |
@@ -93,9 +93,9 @@ jobs:
     <<: *container_config
     steps:
       - *attach_workspace
-      - run:
-          name: Integration test:Prod
-          command: npm run newman:prod
+      # - run:
+      #     name: Integration test:Prod
+      #     command: npm run newman:prod
       - run:
           name: Configure Serverless AWS Prod Credentials
           command: |

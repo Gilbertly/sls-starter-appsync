@@ -1,29 +1,44 @@
-- type: AWS_LAMBDA
+- type: AMAZON_DYNAMODB
   name: getItemQuery
   config:
-    functionName: getItemQueryFn
-    serviceRoleArn: !GetAtt AppSyncServiceRole.Arn
+    tableName: !Ref ItemsDynamodbTable
+    iamRoleStatements:
+      - Effect: Allow
+        Action: dynamodb:GetItem
+        Resource: !GetAtt ItemsDynamodbTable.Arn
 
-- type: AWS_LAMBDA
+- type: AMAZON_DYNAMODB
   name: getItemsQuery
   config:
-    functionName: getItemsQueryFn
-    serviceRoleArn: !GetAtt AppSyncServiceRole.Arn
+    tableName: !Ref ItemsDynamodbTable
+    iamRoleStatements:
+      - Effect: Allow
+        Action: dynamodb:Query
+        Resource: !GetAtt ItemsDynamodbTable.Arn
 
-- type: AWS_LAMBDA
+- type: AMAZON_DYNAMODB
   name: addItemMutation
   config:
-    functionName: addItemMutationFn
-    serviceRoleArn: !GetAtt AppSyncServiceRole.Arn
+    tableName: !Ref ItemsDynamodbTable
+    iamRoleStatements:
+      - Effect: Allow
+        Action: dynamodb:PutItem
+        Resource: !GetAtt ItemsDynamodbTable.Arn
 
-- type: AWS_LAMBDA
+- type: AMAZON_DYNAMODB
   name: updateItemMutation
   config:
-    functionName: updateItemMutationFn
-    serviceRoleArn: !GetAtt AppSyncServiceRole.Arn
+    tableName: !Ref ItemsDynamodbTable
+    iamRoleStatements:
+      - Effect: Allow
+        Action: dynamodb:UpdateItem
+        Resource: !GetAtt ItemsDynamodbTable.Arn
 
-- type: AWS_LAMBDA
+- type: AMAZON_DYNAMODB
   name: deleteItemMutation
   config:
-    functionName: deleteItemMutationFn
-    serviceRoleArn: !GetAtt AppSyncServiceRole.Arn
+    tableName: !Ref ItemsDynamodbTable
+    iamRoleStatements:
+      - Effect: Allow
+        Action: dynamodb:DeleteItem
+        Resource: !GetAtt ItemsDynamodbTable.Arn

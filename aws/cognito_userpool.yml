@@ -3,7 +3,7 @@ Resources:
     Type: AWS::Cognito::UserPool
     DependsOn: PostConfirmFnLambdaFunction
     Properties:
-      UserPoolName: ${self:service.name}-userpool
+      UserPoolName: ${self:service}-userpool
       UsernameAttributes:
         - email
       AutoVerifiedAttributes:
@@ -24,13 +24,13 @@ Resources:
     Type: AWS::Cognito::UserPoolDomain
     Properties:
       UserPoolId: !Ref CognitoUserPool
-      Domain: ${self:service.name}
+      Domain: ${self:service}
 
   CognitoUserPoolClient:
     Type: AWS::Cognito::UserPoolClient
     DependsOn: CognitoIdentityPoolGoogle
     Properties:
-      ClientName: ${self:service.name}-userpool-client
+      ClientName: ${self:service}-userpool-client
       UserPoolId: !Ref CognitoUserPool
       PreventUserExistenceErrors: ENABLED
       AllowedOAuthFlowsUserPoolClient: true
@@ -40,11 +40,6 @@ Resources:
         - ALLOW_USER_PASSWORD_AUTH # so that newman works
         - ALLOW_USER_SRP_AUTH # so that apollo works
         - ALLOW_REFRESH_TOKEN_AUTH
-      AnalyticsConfiguration:
-        ApplicationId: !Ref PinpointAppAnalytics
-        ExternalId: !GetAtt CognitoPinpointAnalyticsRole.RoleId
-        RoleArn: !GetAtt CognitoPinpointAnalyticsRole.Arn
-        UserDataShared: true
       SupportedIdentityProviders:
         - COGNITO
         - Google
@@ -89,9 +84,9 @@ Resources:
 
 Outputs:
   UserPoolId:
-    Description: ${self:service.name} userpool id.
+    Description: ${self:service} userpool id.
     Value: !Ref CognitoUserPool
 
   UserPoolClientId:
-    Description: ${self:service.name} userpool client id.
+    Description: ${self:service} userpool client id.
     Value: !Ref CognitoUserPoolClient

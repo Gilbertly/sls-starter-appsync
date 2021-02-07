@@ -2,7 +2,7 @@ Resources:
   CognitoIdentityPool:
     Type: AWS::Cognito::IdentityPool
     Properties:
-      IdentityPoolName: ${self:service.name}-identitypool
+      IdentityPoolName: ${self:service}-identitypool
       AllowUnauthenticatedIdentities: false
       CognitoIdentityProviders:
         - ClientId: !Ref CognitoUserPoolClient
@@ -26,11 +26,11 @@ Resources:
         name: name
         picture: picture
       ProviderDetails:
-        client_id: ${self:custom.ssmPath.google_client_id}
-        client_secret: ${self:custom.ssmPath.google_client_secret}
+        client_id: ${self:custom.param.${self.provider.stage}.googleClientID}
+        client_secret: ${self:custom.param.${self.provider.stage}.googleClientSecret}
         authorize_scopes: email openid profile
 
 Outputs:
   IdentityPoolId:
-    Description: ${self:service.name} identity pool id.
+    Description: ${self:service} identity pool id.
     Value: !Ref CognitoIdentityPool

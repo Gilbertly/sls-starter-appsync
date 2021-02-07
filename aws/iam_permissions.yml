@@ -3,7 +3,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       Path: /
-      RoleName: ${self:service.name}-cognito-auth-role
+      RoleName: ${self:service}-cognito-auth-role
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -35,7 +35,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       Path: /
-      RoleName: ${self:service.name}-lambda-role
+      RoleName: ${self:service}-lambda-role
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -50,31 +50,7 @@ Resources:
             Statement:
               - Effect: Allow
                 Action: lambda:InvokeFunction
-                Resource:
-                  - 'arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:*'
-
-  CognitoPinpointAnalyticsRole:
-    Type: AWS::IAM::Role
-    DependsOn: PinpointAppAnalytics
-    Properties:
-      Path: /
-      RoleName: ${self:service.name}-pinpoint-cognito-role
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: cognito-idp.amazonaws.com
-            Action: sts:AssumeRole
-      Policies:
-        - PolicyName: CollectCognitoAnalytics
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - mobileanalytics:PutEvents
-                Resource: !GetAtt PinpointAppAnalytics.Arn
+                Resource: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:*
 
   CognitoPostConfirmTriggerPermission:
     Type: AWS::Lambda::Permission

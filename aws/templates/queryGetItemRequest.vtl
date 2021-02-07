@@ -1,0 +1,8 @@
+{
+  "version" : "2018-05-29",
+  "operation" : "GetItem",
+  "key" : {
+    "userId" : $util.dynamodb.toDynamoDBJson($context.identity.claims['custom:userId']),
+    "itemId": $util.dynamodb.toDynamoDBJson($context.arguments.itemId)
+  }
+}
