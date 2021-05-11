@@ -30,7 +30,7 @@
     }
   },
   "dependencies": {
-    "@sentry/node": "^6.3.5",
+    "@sentry/node": "^6.3.6",
     "aws-sdk": "^2.899.0"
   },
   "devDependencies": {
