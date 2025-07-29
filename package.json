@@ -54,7 +54,7 @@
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "serverless": "^2.22.0",
-    "serverless-appsync-plugin": "^1.6.0",
+    "serverless-appsync-plugin": "^2.9.1",
     "serverless-iam-roles-per-function": "^3.1.0",
     "serverless-prune-plugin": "^1.4.3",
     "serverless-webpack": "^5.3.5",
